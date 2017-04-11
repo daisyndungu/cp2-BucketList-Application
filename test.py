@@ -51,6 +51,7 @@ class InitialTests(TestCase):
         }
         response = request.post("/auth/register", user_data=user)
         self.assertEqual(response.status_code, 201)
+
     def test_create_bucket_list(self):
         new_bucket_list_name = 'Travel'
         BucketList_in_db = BucketList.query.count()
@@ -58,6 +59,15 @@ class InitialTests(TestCase):
         self.assertEqual(post_response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BucketList.query.count(), BucketList_in_db + 1)
 
+    def test_create_bucket_list_item(self):
+        new_bucket_list_name = 'Rome'
+        description = "Picture the clashing swords of gladiators."
+        BucketListItem_in_db = BucketListItem.query.count()
+        post_response = views.create_bucketListItem(new_bucket_list_Item_name,
+                                                    description)
+        self.assertEqual(post_response.status_code, 201)
+        self.assertEqual(BucketListItem.query.count(),
+                         BucketListItem_in_db + 1)
 
 if __name__ == '__main__':
     unittest.main()
