@@ -60,7 +60,7 @@ class InitialTests(TestCase):
         response = self.client.delete("/bucketlist/1")
         self.assertEqual(response.status_code, 204)
 
-    def test_unexisting_bucketlist(self):
+    def test_delete_unexisting_bucketlist(self):
         response = self.client.delete("/bucketlist/1")
         self.assertEqual(response.status_code, 400)
 
