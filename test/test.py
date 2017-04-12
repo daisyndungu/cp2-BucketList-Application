@@ -21,9 +21,7 @@ class InitialTests(TestCase):
         self.app_context.push()
         self.db = db
         self.db.create_all()
-        self.bucketlist = {
-            "name": "Test BucketList"
-        }
+        self.bucketlist = {"name": "Test BucketList"}
 
     def tearDown(self):
         self.db = db
@@ -32,19 +30,25 @@ class InitialTests(TestCase):
         self.app_context.pop()
 
     def test_create_new_bucketlist(self):
-        new_bucket_list = {"name": "Travel"}
-
-        response = self.client.post("/bucketlist",
-                                    data=json.dumps(new_bucket_list))
+        response = self.client.post("/bucketlist/",
+                                    data=json.dumps(self.bucketlist))
         self.assertEqual(response.status_code, 201)
 
     def test_create_an_existing_buckelist(self):
-        bucketlist = {
-            "name": "Test BucketList"
-        }
-        response = self.client.post("/bucketlist",
-                                    data=json.dumps(bucketlist))
+        # Create a bucketlist
+        self.client.post("/bucketlist/", data=json.dumps(self.bucketlist))
+        # Add the same bucketlist
+        response = self.client.post("/bucketlist/",
+                                    data=json.dumps(self.bucketlist))
         self.assertEqual(response.status_code, 400)
+
+    def test_update_bucket_list(self):
+        new_bucketlist_name = {"name": "Changed Name"}
+        self.client.post("/bucketlist/", data=json.dumps(self.bucketlist))
+        response = self.client.put("/bucketlist/1",
+                                   data=json.dumps(new_bucketlist_name))
+        self.assertEqual(response.status_code, 200)
+
 
 if __name__ == "__main__":
     unittest.main()
