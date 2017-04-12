@@ -1,8 +1,22 @@
 from datetime import datetime
-from ..app import views
-from app import db, app
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
-# db = app.db
+db = SQLAlchemy()
+ma = Marshmallow()
+
+
+class AddUpdateDelete():
+    def add(self, resource):
+        db.session.add(resource)
+        return db.session.commit()
+
+    def update(self):
+        return db.session.commit()
+
+    def delete(self, resource):
+        db.session.delete(resource)
+        return db.session.commit()
 
 
 class User(db.Model):
