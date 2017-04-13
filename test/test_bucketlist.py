@@ -1,23 +1,22 @@
-import unittest
 import status
+import unittest
 from flask import Flask
-from flask import Flask, jsonify, g, request, make_response, current_app, json
 from unittest import TestCase
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify, g, request, make_response, current_app, json
 
-from bucketlist.run import create_app
 from bucketlist.models import db
-from bucketlist import config
 
 
 class InitialTests(TestCase):
 
     def setUp(self):
-        self.app = create_app("test")
-        self.app.config['TESTING'] = True
+        self.app = Flask("test")
+        self.app.config.from_object("bucketlist.config.TestingConfig")
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.db = db
+        self.db = SQLAlchemy(self.app)
         self.db.create_all()
         self.bucketlist = {"name": "Test BucketList"}
 
