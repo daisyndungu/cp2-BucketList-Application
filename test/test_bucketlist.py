@@ -4,7 +4,7 @@ from flask import Flask
 from flask import Flask, jsonify, g, request, make_response, current_app, json
 from unittest import TestCase
 
-from bucketlist.app import create_app
+from bucketlist.run import create_app
 from bucketlist.models import db
 from bucketlist import config
 

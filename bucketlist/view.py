@@ -1,20 +1,45 @@
 import status
-from app import app
+from flask import Blueprint, request, jsonify, make_response
 from flask_restful import Api
-from bucketlist.models import User, BucketList, BucketListItem, db
+from flask.views import MethodView
 
-app = app
-api = Api(app)
+from bucketlist.run import app, db
+from bucketlist.models import User, BucketList, BucketListItem
 
 
-class Bucketlist():
-    pass
+class Bucketlist(MethodView):
+    def get(self):
+        pass
+
+    def post(self, id):
+        pass
+
+    def put(self, id):
+        pass
+
+    def delete(self, id):
+        pass
 
 
 class BucketListItem():
-    pass
+    def get(self):
+        pass
+
+    def post(self, id):
+        pass
+
+    def put(self, id):
+        pass
+
+    def delete(self, id):
+        pass
+
 
 api.add_resource(BucketList, "/bucketlist/")
 api.add_resource(BucketList, "/bucketlist/<init:id>")
 api.add_resource(BucketList, "/bucketlist/<init:id>/items/")
 api.add_resource(BucketListItem, "/bucketlists/<id>/items/<item_id>")
+
+
+if __name__ == '__main__':
+    app.run()
