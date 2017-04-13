@@ -1,15 +1,20 @@
 import status
 from flask import Blueprint, request, jsonify, make_response
-from flask_restful import Api
+from flask_restful import Api, Resource
 from flask.views import MethodView
 
-from bucketlist.run import app, db
+# from bucketlist.run import app, db
 from bucketlist.models import User, BucketList, BucketListItem
 
 
-class Bucketlist(MethodView):
-    def get(self):
-        pass
+class Bucketlist(MethodView, Resource):
+    def get(self, id=None):
+        if id:
+            bucketlist = BucketList.query.get_or_404(id)
+            return json.dump(bucketlist)
+        else:
+            bucketlists = bucketlist.query.all()
+            return json.dump(bucketlists)
 
     def post(self, id):
         pass
