@@ -1,5 +1,11 @@
 from datetime import datetime
-from bucketlist.run import db
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+
+app = Flask(__name__)
+app.config.from_object("bucketlist.config.DevelopmentConfig")
+db = SQLAlchemy(app)
 
 
 class AddUpdateDelete():
