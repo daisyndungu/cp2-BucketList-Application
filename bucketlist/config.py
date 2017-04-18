@@ -12,6 +12,9 @@ class Config():
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", None) + "/bucketlist"
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'migrations')
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    PAGINATION_PAGE_SIZE = 5
+    PAGINATION_PAGE_ARGUMENT_NAME = 'page'
 
 
 class Production(Config):
@@ -24,7 +27,6 @@ class Staging(Config):
 
 
 class DevelopmentConfig(Config):
-    # SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", None) + "/bucketlist"
     DEVELOPMENT = True
     DEBUG = True
 
