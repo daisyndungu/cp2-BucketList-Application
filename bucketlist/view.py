@@ -8,10 +8,19 @@ from models import BucketList, BucketListItem, app, db
 
 api = Api(app)
 
+item_format = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'description': fields.String,
+    'date_created': fields.DateTime,
+    'date_modified': fields.DateTime,
+    'status': fields.String
+}
 
 bucketlist_format = {
     'bucketlist_id': fields.Integer,
     'name': fields.String,
+    'items': item_format,
     'date_created': fields.DateTime,
     'date_modified': fields.DateTime
 
@@ -26,7 +35,11 @@ class BucketlistView(Resource):
         if bucketlist_id:
             bucketlist_query = BucketList.query.filter_by(
                 bucketlist_id=bucketlist_id).first()
+            items = BucketListItem.query.filter_by(
+                                            bucketlist_id=bucketlist_id).all()
             if bucketlist_query:
+                marshal(items, item_format)
+                print(items)
                 return marshal(bucketlist_query, bucketlist_format), 200
             else:
                 return {'Error': 'bucketlist does not exist'}, 400
@@ -86,7 +99,7 @@ class BucketListItemView(Resource):
         self.reqparse.add_argument('name', type=str, location='json',
                                    required=True, help="Item name is required")
         self.reqparse.add_argument('description', type=str, location='json')
-        self.reqparse.add_argument('status', type=bool, location='json')
+        self.reqparse.add_argument('status', type=str, location='json')
         super(BucketListItemView, self).__init__()
 
     def post(self, bucketlist_id):
@@ -119,10 +132,29 @@ class BucketListItemView(Resource):
         if bucket_list:
             bucketlist_item = BucketListItem.query.filter_by(
                         item_id=item_id, bucketlist_id=bucketlist_id).first()
+            # print(bucketlist_item.description)
             if not bucketlist_item:
                 return {'Error': 'Bucketlist item does not exist'}, 400
-            request = request.get_json()
-            pass
+            request_dict = self.reqparse.parse_args()
+            name = request_dict['name']
+            status = request_dict['status']
+            description = request_dict['description']
+            if request_dict:
+                try:
+                    if name:
+                        bucketlist_item.name = name
+                        bucketlist_item.update()
+                    if status:
+                        bucketlist_item.status = status
+                        bucketlist_item.update()
+                    if description:
+                        bucketlist_item.description = description
+                        bucketlist_item.update()
+                    return {'Done': 'Bucketlist Updated Successfully'}, 200
+
+                except SQLAlchemyError:
+                    return {'Error': 'No changes made. A bucketlist\
+                    with that name exists or wrong status included'}, 400
 
     def delete(self, bucketlist_id, item_id):
         bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
