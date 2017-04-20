@@ -1,14 +1,13 @@
 import status
-from flask import Blueprint, request, jsonify, make_response, json
+from flask import request, jsonify, make_response, json
 from flask_restful import Api, Resource, marshal, fields, reqparse
-from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError
 
 from models import BucketList, BucketListItem, app, db
 
 api = Api(app)
 
-item_format = {
+item_output = {
     'id': fields.Integer,
     'name': fields.String,
     'description': fields.String,
@@ -17,10 +16,9 @@ item_format = {
     'status': fields.String
 }
 
-bucketlist_format = {
+bucketlist_output = {
     'bucketlist_id': fields.Integer,
     'name': fields.String,
-    'items': item_format,
     'date_created': fields.DateTime,
     'date_modified': fields.DateTime
 
@@ -30,29 +28,32 @@ bucketlist_format = {
 class BucketlistView(Resource):
     def get(self, bucketlist_id=None):
         """
-        Get one buckect list
+        Display one buckectlist
         """
         if bucketlist_id:
+            # Query one bucketlist
             bucketlist_query = BucketList.query.filter_by(
                 bucketlist_id=bucketlist_id).first()
             items = BucketListItem.query.filter_by(
                                             bucketlist_id=bucketlist_id).all()
             if bucketlist_query:
-                marshal(items, item_format)
-                print(items)
-                return marshal(bucketlist_query, bucketlist_format), 200
+                marshal(items, item_output)
+                return marshal(bucketlist_query, bucketlist_output), 200
             else:
                 return {'Error': 'bucketlist does not exist'}, 400
         else:
+            # Get all bucketlists
             bucketlist = BucketList.query.all()
-            return marshal(bucketlist, bucketlist_format), 200
+            return marshal(bucketlist, bucketlist_output), 200
 
     def post(self):
         """
-        Get user's input and save it to database(POST request)
+        Add a new bucket list
         """
+        # Get users input
         request_dict = request.get_json()
         if not request_dict:
+            # If no input
             response = {'Error': 'No input data provided'}
             return response, 400
         else:
@@ -68,7 +69,9 @@ class BucketlistView(Resource):
                 return {"Error": " The bucketlist entered already exists"}, 400
 
     def put(self, bucketlist_id):
-        # if bucketlist_id
+        """
+        Edit a bucketlist name
+        """
         bucketlist = BucketList.query.filter_by(
                     bucketlist_id=bucketlist_id).first()
         try:
@@ -84,6 +87,9 @@ class BucketlistView(Resource):
             return {'Error': 'A bucketlist with that name exists'}, 400
 
     def delete(self, bucketlist_id):
+        """
+        Remove a bucketlist from the database
+        """
         bucketlist = BucketList.query.filter_by(
                 bucketlist_id=bucketlist_id).first()
         if bucketlist:
@@ -104,7 +110,7 @@ class BucketListItemView(Resource):
 
     def post(self, bucketlist_id):
         """
-        Get user's input and save it to database(POST request)
+        Save a new bucketlist item
         """
 
         bucketlist_query = BucketList.query.filter_by(
@@ -127,12 +133,14 @@ class BucketListItemView(Resource):
                         exists"}, 400
 
     def put(self, bucketlist_id, item_id):
+        """
+        Edit an item's name, description or/and status
+        """
         bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
                                                  ).first()
         if bucket_list:
             bucketlist_item = BucketListItem.query.filter_by(
                         item_id=item_id, bucketlist_id=bucketlist_id).first()
-            # print(bucketlist_item.description)
             if not bucketlist_item:
                 return {'Error': 'Bucketlist item does not exist'}, 400
             request_dict = self.reqparse.parse_args()
@@ -157,6 +165,9 @@ class BucketListItemView(Resource):
                     with that name exists or wrong status included'}, 400
 
     def delete(self, bucketlist_id, item_id):
+        """
+        Remove a bucketlist item from the database
+        """
         bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
                                                  ).first()
         if not bucket_list:
@@ -165,7 +176,7 @@ class BucketListItemView(Resource):
                         item_id=item_id, bucketlist_id=bucketlist_id).first()
         if not bucketlist_item:
             return {'Error': 'Bucketlist item does not exist'}, 400
-        bucketlist_item.delete()
+        bucketlist_item.delete(bucketlist_item)
         return {'Done': 'Bucketlist item deleted successfully'}, 200
 
 
