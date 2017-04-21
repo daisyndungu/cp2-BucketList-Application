@@ -37,13 +37,15 @@ class BucketlistView(Resource):
             items = BucketListItem.query.filter_by(
                                             bucketlist_id=bucketlist_id).all()
             if bucketlist_query:
-                marshal(items, item_output)
                 return marshal(bucketlist_query, bucketlist_output), 200
             else:
                 return {'Error': 'bucketlist does not exist'}, 400
         else:
             # Get all bucketlists
-            bucketlist = BucketList.query.all()
+            # Set page limit to 20 items per page if the user does not
+            # specify a number
+            page_limit = request.args.get('limit', 20)
+            bucketlist = BucketList.query.limit(page_limit).all()
             return marshal(bucketlist, bucketlist_output), 200
 
     def post(self):
@@ -180,13 +182,13 @@ class BucketListItemView(Resource):
         return {'Done': 'Bucketlist item deleted successfully'}, 200
 
 
-api.add_resource(BucketlistView, '/bucketlist/', endpoint='add_bucketlist')
-api.add_resource(BucketlistView, '/bucketlist/<int:bucketlist_id>',
+api.add_resource(BucketlistView, '/bucketlists/', endpoint='add_bucketlist')
+api.add_resource(BucketlistView, '/bucketlists/<int:bucketlist_id>',
                  endpoint='bucketlistview')
-api.add_resource(BucketListItemView, '/bucketlist/<int:bucketlist_id>/items/',
+api.add_resource(BucketListItemView, '/bucketlists/<int:bucketlist_id>/items/',
                  endpoint='create_bucketlist_item')
 api.add_resource(BucketListItemView,
-                 '/bucketlist/<int:bucketlist_id>/items/<int:item_id>',
+                 '/bucketlists/<int:bucketlist_id>/items/<int:item_id>',
                  endpoint='UpdateDelete_bucketlist_item')
 
 if __name__ == '__main__':
