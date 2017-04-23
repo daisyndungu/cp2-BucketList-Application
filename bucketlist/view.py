@@ -45,7 +45,19 @@ class BucketlistView(Resource):
             # Set page limit to 20 items per page if the user does not
             # specify a number
             page_limit = request.args.get('limit', 20)
-            bucketlist = BucketList.query.limit(page_limit).all()
+            # Set page offset that controls the starting point within
+            # the collection of resource results
+            page_offset = request.args.get('offset', 0)
+
+            # Check if request is a search request
+            search_name = request.args.get('q')
+            if search_name:
+                bucketlist = BucketList.query.whoosh_search(search_name).all()
+                return marshal(bucketlist, bucketlist_output), 200
+
+            # If not a search request then gets all bucket lists
+            bucketlist = BucketList.query.limit(page_limit
+                                                ).offset(page_offset).all()
             return marshal(bucketlist, bucketlist_output), 200
 
     def post(self):
