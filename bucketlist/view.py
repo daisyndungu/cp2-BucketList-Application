@@ -1,14 +1,13 @@
 import status
+
 from flask import request, jsonify, make_response, json, g, make_response
-from flask_httpauth import HTTPTokenAuth
-from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask_restful import Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError
 
-from bucketlist.models import (User, BucketList, BucketListItem, app, db)
-from bucketlist.auth import authorize_token, decode_auth_token
+from bucketlist.models import BucketList, BucketListItem
+from bucketlist.auth import authorize_token
 from bucketlist.user import UserRegistration, UserLogin
-
-api = Api(app)
+from bucketlist import api
 
 
 item_output = {

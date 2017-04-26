@@ -1,5 +1,6 @@
 import status
-from flask import request, jsonify, make_response, json, g, make_response
+
+from flask import request, jsonify, make_response, json, g
 from flask_httpauth import HTTPTokenAuth
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError

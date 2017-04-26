@@ -1,10 +1,12 @@
 import time
 import datetime
+
 from flask_jwt import jwt
 from functools import wraps
-from flask import request, make_response, jsonify, g, json
+from flask import request, make_response, jsonify, g
 
-from bucketlist.models import User, app
+from bucketlist.models import User
+from bucketlist import app
 
 
 def decode_auth_token(auth_token):
