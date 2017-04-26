@@ -1,11 +1,15 @@
 import status
-from flask import request, jsonify, make_response, json
+# from flask_jwt import JWT, jwt_required, current_identity
+from flask import request, jsonify, make_response, json, g
+from flask_httpauth import HTTPTokenAuth
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError
 
-from models import BucketList, BucketListItem, app, db
+from models import (User, BucketList, BucketListItem, app, db, authorize_token,
+                    decode_auth_token)
 
 api = Api(app)
+
 
 item_output = {
     'id': fields.Integer,
@@ -25,21 +29,90 @@ bucketlist_output = {
     }
 
 
+class UserRegistration(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type=str, location='json',
+                                   required=True,
+                                   help="Please enter your username")
+        self.reqparse.add_argument('email', type=str, location='json',
+                                   required=True,
+                                   help="Please enter your email")
+        self.reqparse.add_argument('password', type=str, location='json',
+                                   required=True,
+                                   help="Please enter your password")
+        super(UserView, self).__init__()
+
+    def post(self):
+        """
+        User Registration
+        """
+        user_details = self.reqparse.parse_args()
+        try:
+            user = User(username=user_details['username'],
+                        email=user_details['email'],
+                        password=user_details['password'])
+            user.add(user)
+            return {'Done': 'User added successfully'}, 201
+        except SQLAlchemyError:
+                # Returns an error if a user
+                # with the same name or email already exists
+                db.session.rollback()
+                return {"Error": "User with the same username or\
+                            email already exists"}, 400
+
+
+class UserLogin(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type=str, location='json',
+                                   required=True,
+                                   help="Please enter your username")
+        self.reqparse.add_argument('password', type=str, location='json',
+                                   required=True,
+                                   help="Please enter your password")
+        super(UserLogin, self).__init__()
+
+    def post(self):
+        """
+        Login a user
+        """
+        user_details = self.reqparse.parse_args()
+        try:
+            user = User.query.filter_by(username=user_details['username'],
+                                        password=user_details['password']
+                                        ).first()
+            if user:
+                token = user.generate_auth_token(user.id)
+                dec_token = decode_auth_token(token)
+                print(type(token))
+                print(dec_token)
+                return {'Token': str(token)}, 201
+            else:
+                return{'Error': 'Wrong user name or password'}
+        except Exception as e:
+                # db.session.rollback()
+                return {"Error": str(e)}, 400
+
+
 class BucketlistView(Resource):
+    decorators = [authorize_token]
+
     def get(self, bucketlist_id=None):
         """
         Display one buckectlist
         """
         if bucketlist_id:
             # Query one bucketlist
-            bucketlist_query = BucketList.query.filter_by(
+            bucketlist = BucketList.query.filter_by(
                 bucketlist_id=bucketlist_id).first()
             items = BucketListItem.query.filter_by(
                                             bucketlist_id=bucketlist_id).all()
+            bucketlist_query = bucketlist.items
             if bucketlist_query:
                 return marshal(bucketlist_query, bucketlist_output), 200
             else:
-                return {'Error': 'bucketlist does not exist'}, 400
+                return jsonify({'Error': 'bucketlist does not exist'}), 400
         else:
             # Get all bucketlists
             # Set page limit to 20 items per page if the user does not
@@ -48,11 +121,10 @@ class BucketlistView(Resource):
             # Set page offset that controls the starting point within
             # the collection of resource results
             page_offset = request.args.get('offset', 0)
-
             # Check if request is a search request
             search_name = request.args.get('q')
             if search_name:
-                bucketlist = BucketList.query.whoosh_search(search_name).all()
+                bucketlist = BucketList.query.filter_by(name=search_name).all()
                 return marshal(bucketlist, bucketlist_output), 200
 
             # If not a search request then gets all bucket lists
@@ -114,6 +186,8 @@ class BucketlistView(Resource):
 
 
 class BucketListItemView(Resource):
+    decorators = [authorize_token]
+
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, location='json',
@@ -202,6 +276,8 @@ api.add_resource(BucketListItemView, '/bucketlists/<int:bucketlist_id>/items/',
 api.add_resource(BucketListItemView,
                  '/bucketlists/<int:bucketlist_id>/items/<int:item_id>',
                  endpoint='UpdateDelete_bucketlist_item')
+api.add_resource(UserRegistration, '/auth/register', endpoint='register')
+api.add_resource(UserLogin, '/auth/login', endpoint='login')
 
 if __name__ == '__main__':
     app.run()
