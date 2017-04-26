@@ -1,7 +1,8 @@
 from flask_jwt import jwt
-from flask import Flask
+from flask import Flask, request, make_response, jsonify
 import datetime
 import time
+from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
@@ -33,24 +34,60 @@ class User(db.Model, AddUpdateDelete):
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(128))
 
-    def hash_password(self, password):
-        pass
-
-    def generate_auth_token(self, expiration=3600000):
-        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'id': self.id})
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
+    def generate_auth_token(self, id):
+        """
+        Generates the Auth Token
+        """
         try:
-            data = s.loads(token)
-        except SignatureExpired:
-            return None
-        except BadSignature:
-            return None
-        user = User.query.get(data['id'])
-        return user
+            payload = {
+                'exp': (datetime.datetime.utcnow() +
+                        datetime.timedelta(seconds=3600)),
+                'iat': datetime.datetime.utcnow(),
+                'sub': id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
+
+def decode_auth_token(auth_token):
+    """
+    Decodes the auth token
+    :param auth_token:
+    :return: integer|string
+    """
+    try:
+        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'),
+                             algorithms=['HS256'])
+        return {'response': payload['sub'], 'status': True}
+    except jwt.ExpiredSignatureError:
+        return {'response': 'Signature expired. Please log in again.',
+                'status': False}
+    except jwt.InvalidTokenError as e:
+        return {'response': str(e), 'status': False}
+
+
+def authorize_token(func):
+    @wraps(func)
+    def decorators(*args, **kwargs):
+        try:
+            auth_header = request.headers['Authorization']
+            resp = decode_auth_token(auth_header)
+            if resp['status'] is False:
+                data = {
+                    'Error': resp['response']
+                }
+                response = make_response(jsonify(data), 401)
+                return response
+        except KeyError:
+            return 'Unauthorized access. Please check your token or\
+            Authorization key', 401
+        return func(*args, **kwargs)
+    return decorators
 
 
 class BucketList(db.Model, AddUpdateDelete):
