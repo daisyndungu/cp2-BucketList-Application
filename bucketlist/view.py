@@ -4,7 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource, marshal, fields, reqparse
 from flask import request, jsonify, make_response, json, g, make_response
 
-from bucketlist import api
+from bucketlist import api, db
 from bucketlist.auth import authorize_token
 from bucketlist.user import UserRegistration, UserLogin
 from bucketlist.models import BucketList, BucketListItem

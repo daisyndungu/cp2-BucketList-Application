@@ -4,8 +4,8 @@ from flask_script import Manager, Server
 from flask_migrate import Migrate, MigrateCommand
 
 from bucketlist import db, app
-from bucketlist.view import BucketListItemView, BucketlistView, UserLogin, UserRegistration
-# from bucketlist.user import 
+from bucketlist.view import BucketListItemView, BucketlistView
+from bucketlist.user import UserLogin, UserRegistration
 
 db.configure_mappers()
 migrate = Migrate(app, db)
