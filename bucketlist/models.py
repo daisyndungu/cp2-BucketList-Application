@@ -1,16 +1,10 @@
 import time
 import datetime
 
-# from flask import Flask
 from flask_jwt import jwt
-# from flask_sqlalchemy import SQLAlchemy
 
 from bucketlist import db, app
 from bucketlist.config import configurations
-
-# app = Flask(__name__)
-# app.config.from_object(configurations['development'])
-# db = SQLAlchemy(app)
 
 
 class AddUpdateDelete():

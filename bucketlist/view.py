@@ -1,13 +1,13 @@
 import status
 
-from flask import request, jsonify, make_response, json, g, make_response
-from flask_restful import Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError
+from flask_restful import Resource, marshal, fields, reqparse
+from flask import request, jsonify, make_response, json, g, make_response
 
-from bucketlist.models import BucketList, BucketListItem
+from bucketlist import api
 from bucketlist.auth import authorize_token
 from bucketlist.user import UserRegistration, UserLogin
-from bucketlist import api
+from bucketlist.models import BucketList, BucketListItem
 
 
 item_output = {
@@ -258,7 +258,6 @@ class BucketListItemView(Resource):
         items = BucketListItem.query.filter_by(
                                         bucketlist_id=bucketlist_id).all()
         return marshal(items, item_output), 200
-
 
 api.add_resource(BucketlistView, '/bucketlists/', endpoint='add_bucketlist')
 api.add_resource(BucketlistView, '/bucketlists/<int:bucketlist_id>',
