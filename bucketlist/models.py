@@ -4,7 +4,7 @@ from flask import Flask
 from flask_jwt import jwt
 from flask_sqlalchemy import SQLAlchemy
 
-from config import configurations
+from bucketlist.config import configurations
 
 app = Flask(__name__)
 app.config.from_object(configurations['development'])
@@ -34,26 +34,29 @@ class User(db.Model, AddUpdateDelete):
                                  cascade='all,delete', passive_deletes=True)
 
     def generate_auth_token(self, id):
-            """
-            Generates the Auth Token
-            """
-            try:
-                payload = {
-                    'exp': (datetime.datetime.utcnow() +
-                            datetime.timedelta(seconds=3600)),
-                    'iat': datetime.datetime.utcnow(),
-                    'sub': id
-                }
-                return jwt.encode(
-                    payload,
-                    app.config.get('SECRET_KEY'),
-                    algorithm='HS256'
-                )
-            except Exception as e:
-                return e
+        """
+        Generates the Auth Token
+        """
+        try:
+            payload = {
+                'exp': (datetime.datetime.utcnow() +
+                        datetime.timedelta(seconds=3600)),
+                'iat': datetime.datetime.utcnow(),
+                'sub': id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
 
 
 class BucketList(db.Model, AddUpdateDelete):
+    """
+    Create bucketlist model
+    """
     __tablename__ = 'bucketlist'
     bucketlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(20), unique=True, nullable=False)
@@ -72,6 +75,9 @@ class BucketList(db.Model, AddUpdateDelete):
 
 
 class BucketListItem(db.Model, AddUpdateDelete):
+    """
+    Create bucketlist item model
+    """
     __tablename__ = 'bucketlistitem'
     item_id = db.Column(db.Integer, autoincrement=True,
                         primary_key=True)

@@ -4,9 +4,9 @@ from flask_httpauth import HTTPTokenAuth
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError
 
-from models import (User, BucketList, BucketListItem, app, db)
-from auth import authorize_token, decode_auth_token
-from user import UserRegistration, UserLogin
+from bucketlist.models import (User, BucketList, BucketListItem, app, db)
+from bucketlist.auth import authorize_token, decode_auth_token
+from bucketlist.user import UserRegistration, UserLogin
 
 api = Api(app)
 
@@ -31,13 +31,15 @@ bucketlist_output = {
 
 
 class BucketlistView(Resource):
-    # Add authorization decorator to all functions in this class
+    # Add authorization decorator to all
+    # functions in this class
     decorators = [authorize_token]
 
     def get(self, bucketlist_id=None):
         """
         Display one buckectlist
         """
+        # Get logged in user Id
         user_id = g.user_id
         if bucketlist_id:
             # Query one bucketlist
@@ -234,7 +236,6 @@ class BucketListItemView(Resource):
                                             item_id=item_id).first()
             if not item:
                 return {'Error': 'bucketlist does not exist'}, 400
-            print(item)
             return marshal(item, item_output), 200
 
         # Get all bucketlists items

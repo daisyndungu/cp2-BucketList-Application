@@ -4,7 +4,7 @@ from flask_httpauth import HTTPTokenAuth
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError
 
-from models import User
+from bucketlist.models import User
 
 
 class UserRegistration(Resource):
@@ -53,7 +53,7 @@ class UserLogin(Resource):
 
     def post(self):
         """
-        Login a user
+        Login a user and generate token
         """
         user_details = self.reqparse.parse_args()
         try:
