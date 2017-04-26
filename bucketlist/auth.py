@@ -2,7 +2,7 @@ import time
 import datetime
 from flask_jwt import jwt
 from functools import wraps
-from flask import request, make_response, jsonify, g
+from flask import request, make_response, jsonify, g, json
 
 from models import User, app
 
