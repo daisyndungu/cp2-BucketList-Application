@@ -1,5 +1,4 @@
 import status
-# from flask_jwt import JWT, jwt_required, current_identity
 from flask import request, jsonify, make_response, json, g
 from flask_httpauth import HTTPTokenAuth
 from flask_restful import Api, Resource, marshal, fields, reqparse
@@ -41,7 +40,7 @@ class UserRegistration(Resource):
         self.reqparse.add_argument('password', type=str, location='json',
                                    required=True,
                                    help="Please enter your password")
-        super(UserView, self).__init__()
+        super(UserRegistration, self).__init__()
 
     def post(self):
         """
@@ -85,8 +84,6 @@ class UserLogin(Resource):
             if user:
                 token = user.generate_auth_token(user.id)
                 dec_token = decode_auth_token(token)
-                print(type(token))
-                print(dec_token)
                 return {'Token': str(token)}, 201
             else:
                 return{'Error': 'Wrong user name or password'}
@@ -102,10 +99,11 @@ class BucketlistView(Resource):
         """
         Display one buckectlist
         """
+        user_id = g.user_id
         if bucketlist_id:
             # Query one bucketlist
             bucketlist = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id).first()
+                bucketlist_id=bucketlist_id, created_by=user_id).first()
             items = BucketListItem.query.filter_by(
                                             bucketlist_id=bucketlist_id).all()
             bucketlist_query = bucketlist.items
@@ -124,9 +122,10 @@ class BucketlistView(Resource):
             # Check if request is a search request
             search_name = request.args.get('q')
             if search_name:
-                bucketlist = BucketList.query.filter_by(name=search_name).all()
+                bucketlist = BucketList.query.filter_by(name=search_name,
+                                                        created_by=user_id
+                                                        ).all()
                 return marshal(bucketlist, bucketlist_output), 200
-
             # If not a search request then gets all bucket lists
             bucketlist = BucketList.query.limit(page_limit
                                                 ).offset(page_offset).all()
@@ -136,6 +135,7 @@ class BucketlistView(Resource):
         """
         Add a new bucket list
         """
+        user_id = g.user_id
         # Get users input
         request_dict = request.get_json()
         if not request_dict:
@@ -144,7 +144,8 @@ class BucketlistView(Resource):
             return response, 400
         else:
             try:
-                bucketlist = BucketList(name=request_dict["name"])
+                bucketlist = BucketList(name=request_dict["name"],
+                                        created_by=user_id)
                 bucketlist.add(bucketlist)
                 return {'Done': 'Bucketlist saved successfully'}, 201
             except SQLAlchemyError:
@@ -158,8 +159,9 @@ class BucketlistView(Resource):
         """
         Edit a bucketlist name
         """
+        user_id = g.user_id
         bucketlist = BucketList.query.filter_by(
-                    bucketlist_id=bucketlist_id).first()
+                    bucketlist_id=bucketlist_id, created_by=user_id).first()
         try:
             if bucketlist:
                 bucketlist_dict = request.get_json()
@@ -176,8 +178,9 @@ class BucketlistView(Resource):
         """
         Remove a bucketlist from the database
         """
+        user_id = g.user_id
         bucketlist = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id).first()
+                bucketlist_id=bucketlist_id, created_by=user_id).first()
         if bucketlist:
             bucketlist.delete(bucketlist)
             return 'Bucketlist deleted Successfully', 200
@@ -200,9 +203,9 @@ class BucketListItemView(Resource):
         """
         Save a new bucketlist item
         """
-
+        user_id = g.user_id
         bucketlist_query = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id).first()
+                bucketlist_id=bucketlist_id, created_by=user_id).first()
         if not bucketlist_query:
             return "Invalid bucketlist", 400
         request_dict = self.reqparse.parse_args()
@@ -224,8 +227,9 @@ class BucketListItemView(Resource):
         """
         Edit an item's name, description or/and status
         """
-        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
-                                                 ).first()
+        user_id = g.user_id
+        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id,
+                                                 created_by=user_id).first()
         if bucket_list:
             bucketlist_item = BucketListItem.query.filter_by(
                         item_id=item_id, bucketlist_id=bucketlist_id).first()
@@ -256,8 +260,9 @@ class BucketListItemView(Resource):
         """
         Remove a bucketlist item from the database
         """
-        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
-                                                 ).first()
+        user_id = g.user_id
+        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id,
+                                                 created_by=user_id).first()
         if not bucket_list:
             return {'message': 'Bucketlist does not exist'}, 400
         bucketlist_item = BucketListItem.query.filter_by(

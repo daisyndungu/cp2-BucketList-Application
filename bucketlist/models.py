@@ -1,5 +1,5 @@
 from flask_jwt import jwt
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, g
 import datetime
 import time
 from functools import wraps
@@ -33,6 +33,8 @@ class User(db.Model, AddUpdateDelete):
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(128))
+    bucketlist = db.relationship('BucketList', backref='user',
+                                 cascade='all,delete', passive_deletes=True)
 
     def generate_auth_token(self, id):
         """
@@ -74,18 +76,18 @@ def decode_auth_token(auth_token):
 def authorize_token(func):
     @wraps(func)
     def decorators(*args, **kwargs):
-        try:
-            auth_header = request.headers['Authorization']
-            resp = decode_auth_token(auth_header)
-            if resp['status'] is False:
-                data = {
+        auth_header = request.headers['Authorization']
+        if not auth_header:
+            return 'Unauthorized access. Please check your token or\
+             Authorization key', 401
+        resp = decode_auth_token(auth_header)
+        if resp['status'] is False:
+            data = {
                     'Error': resp['response']
                 }
-                response = make_response(jsonify(data), 401)
-                return response
-        except KeyError:
-            return 'Unauthorized access. Please check your token or\
-            Authorization key', 401
+            response = make_response(jsonify(data), 401)
+            return response
+        g.user_id = resp['response']
         return func(*args, **kwargs)
     return decorators
 
@@ -99,12 +101,13 @@ class BucketList(db.Model, AddUpdateDelete):
                               onupdate=datetime.datetime.now)
     items = db.relationship('BucketListItem', backref='bucketlist',
                             cascade='all,delete', passive_deletes=True)
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id',
-    #                     onupdate="CASCADE",
-    #                     ondelete="CASCADE"), nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey('user.id',
+                           onupdate="CASCADE",
+                           ondelete="CASCADE"), nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, name, created_by):
         self.name = name
+        self.created_by = created_by
 
 
 class BucketListItem(db.Model, AddUpdateDelete):
