@@ -4,8 +4,8 @@ from flask_httpauth import HTTPTokenAuth
 from flask_restful import Api, Resource, marshal, fields, reqparse
 from sqlalchemy.exc import SQLAlchemyError
 
-from models import (User, BucketList, BucketListItem, app, db, authorize_token,
-                    decode_auth_token)
+from models import (User, BucketList, BucketListItem, app, db)
+from auth import authorize_token, decode_auth_token
 
 api = Api(app)
 
@@ -83,7 +83,7 @@ class UserLogin(Resource):
                                         ).first()
             if user:
                 token = user.generate_auth_token(user.id)
-                dec_token = decode_auth_token(token)
+                print(token)
                 return {'Token': str(token)}, 201
             else:
                 return{'Error': 'Wrong user name or password'}
@@ -271,6 +271,45 @@ class BucketListItemView(Resource):
             return {'Error': 'Bucketlist item does not exist'}, 400
         bucketlist_item.delete(bucketlist_item)
         return {'Done': 'Bucketlist item deleted successfully'}, 200
+
+    def get(self, bucketlist_id, item_id=None):
+        """
+        Display one buckectlist
+        """
+        user_id = g.user_id
+        if item_id:
+            # Query one bucketlist
+            if not BucketList.query.filter_by(
+                   bucketlist_id=bucketlist_id, created_by=user_id).first():
+                return {'Error': 'Unexisting bucket'}, 404
+            item = BucketListItem.query.filter_by(
+                                            bucketlist_id=bucketlist_id,
+                                            item_id=item_id).all()
+            if item:
+                return marshal(item, item_output), 200
+            else:
+                return jsonify({'Error': 'bucketlist does not exist'}), 400
+        # Get all bucketlists items
+        # Set page limit to 20 items per page if the user does not
+        # specify a number
+        page_limit = request.args.get('limit', 20)
+        # Set page offset that controls the starting point within
+        # the collection of resource results
+        page_offset = request.args.get('offset', 0)
+        # Check if request is a search request
+        search_name = request.args.get('q')
+        if not BucketList.query.filter_by(
+               bucketlist_id=bucketlist_id, created_by=user_id).first():
+            return {'Error': 'Unexisting bucket'}, 404
+        if search_name:
+            items = BucketListItem.query.filter_by(
+                                        bucketlist_id=bucketlist_id,
+                                        name=search_name).all()
+            return marshal(items, item_output), 200
+        # If not a search request then gets all bucket lists
+        items = BucketListItem.query.filter_by(
+                                        bucketlist_id=bucketlist_id).all()
+        return marshal(items, item_output), 200
 
 
 api.add_resource(BucketlistView, '/bucketlists/', endpoint='add_bucketlist')
