@@ -6,7 +6,7 @@ class Config():
     DEBUG = False
     TEST = False
     CSRF_ENABLED = True
-    PORT = 5432
+    PORT = 5000
     HOST = "127.0.0.1"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True

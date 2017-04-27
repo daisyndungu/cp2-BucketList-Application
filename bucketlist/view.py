@@ -1,9 +1,9 @@
 from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource, marshal, fields, reqparse
-from flask import request, jsonify, make_response, g
+from flask import request, jsonify, make_response, g, url_for
 from flask_sqlalchemy import sqlalchemy
 
-from bucketlist import db
+from bucketlist import db, app
 from bucketlist.auth import authorize_token
 
 from bucketlist.models import BucketList, BucketListItem
@@ -49,29 +49,83 @@ class BucketlistView(Resource):
 
         else:
             # Get all bucketlists
+            self.reqparse = reqparse.RequestParser()
+            self.reqparse.add_argument('page', location="args", type=int,
+                                       required=False, default=1)
+            self.reqparse.add_argument('per_page', location="args", type=int,
+                                       default=2)
             # Set page limit to 20 items per page if the user does not
             # specify a number
-            page_limit = request.args.get('limit', 20)
+            args = self.reqparse.parse_args()
+            page = args['page']
+            per_page = args['per_page']
+            if per_page > 100:
+                per_page = 100
             # Set page offset that controls the starting point within
             # the collection of resource results
-            page_offset = request.args.get('offset', 0)
+            page = args['page']
             # Check if request is a search request
             search_name = request.args.get('q')
             if search_name:
                 # Check for the occurrence of the word given in all the
                 # bucket lists that belongs to the logged in user
-                bucketlist = BucketList.query.filter(
+                bucketlist = (BucketList.query.filter(
                     BucketList.name.ilike("%{}%".format(search_name))
-                     ).filter_by(created_by=user_id).limit(page_limit).all()
-                return marshal(bucketlist, bucketlist_output), 200
+                     ).filter_by(created_by=user_id)
+                      .paginate(page, per_page, False))
+                if not bucketlist:
+                    return {'Error': 'No results for that name'}, 400
+
+                if bucketlist.has_next:
+                    url_next = ('http://' + request.host + url_for
+                                (request.endpoint) + '?page=' +
+                                str(page + 1) + '&per_page=' + str(per_page) +
+                                '&q={}'.format(search_name))
+                else:
+                    url_next = 'Null'
+
+                if bucketlist.has_prev:
+                    url_prev = ('http://' + request.host + url_for
+                                (request.endpoint) + '?page=' + str(page - 1) +
+                                '&per_page=' + str(per_page) +
+                                '&q={}'.format(search_name))
+                else:
+                    url_prev = 'Null'
+
+                return {'meta': {'next_page': url_next,
+                                 'previous_page': url_prev,
+                                 'total_pages': bucketlist.pages},
+                        'bucketlist':
+                        marshal(bucketlist.items, bucketlist_output)
+                        }, 200
             # If not a search request then gets all bucket lists
-            # TODO
-            bucketlist = BucketList.query.filter_by(
-                created_by=user_id).limit(page_limit).offset(
-                    page_offset).all()
-            if not bucketlist:
-                return {'Error': 'There are no bucketlists at the moment'}, 400
-            return marshal(bucketlist, bucketlist_output), 200
+            bucketlist = (BucketList.query.filter_by(created_by=user_id)
+                          .paginate(page, per_page, False))
+            return paginate(bucketlist, page, per_page)
+
+
+def paginate(data, page, per_page):
+    if not data:
+        return {'Error': 'There are no datas at the moment'}, 400
+
+    if data.has_next:
+        url_next = ('http://' + request.host + url_for
+                    (request.endpoint) + '?page=' + str(page + 1) +
+                    '&per_page=' + str(per_page))
+    else:
+        url_next = 'Null'
+
+    if data.has_prev:
+        url_prev = ('http://' + request.host + url_for
+                    (request.endpoint) + '?page=' + str(page - 1) +
+                    '&per_page=' + str(per_page))
+    else:
+        url_prev = 'Null'
+    return {'meta': {'next_page': url_next,
+                     'previous_page': url_prev,
+                     'total_pages': data.pages},
+            'bucketlist': marshal(data.items, bucketlist_output)
+            }, 200
 
     def post(self):
         """
@@ -225,6 +279,21 @@ class BucketListItemView(Resource):
         """
         Display one buckectlist
         """
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('page', location="args", type=int,
+                                   required=False, default=1)
+        self.reqparse.add_argument('per_page', location="args", type=int,
+                                   default=2)
+        # Set page limit to 20 items per page if the user does not
+        # specify a number
+        args = self.reqparse.parse_args()
+        page = args['page']
+        per_page = args['per_page']
+        if per_page > 100:
+            per_page = 100
+        # Set page offset that controls the starting point within
+        # the collection of resource results
+        page = args['page']
         user_id = g.user_id
         if item_id:
             # Query one bucketlist
@@ -252,14 +321,13 @@ class BucketListItemView(Resource):
             return {'Error': 'Unexisting bucket'}, 404
         if search_name:
             # Check for the occurrence of the word given in all the
-            # bucketlist items that belongs to the logged in user
-            # and the specified bucketlist
+                # bucketlist items that belongs to the logged in user
             items = BucketListItem.query.filter(
                 BucketListItem.name.ilike("%{}%".format(search_name))
                 ).filter_by(bucketlist_id=bucketlist_id
                             ).limit(page_limit).all()
             return marshal(items, item_output), 200
         # If not a search request then gets all bucket lists
-        items = BucketListItem.query.filter_by(
-                                        bucketlist_id=bucketlist_id).all()
+        items = (BucketListItem.query.filter_by(
+                 bucketlist_id=bucketlist_id).all())
         return marshal(items, item_output), 200
