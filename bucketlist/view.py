@@ -1,6 +1,7 @@
 from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource, marshal, fields, reqparse
 from flask import request, jsonify, make_response, g
+from flask_sqlalchemy import sqlalchemy
 
 from bucketlist import db
 from bucketlist.auth import authorize_token
@@ -57,9 +58,11 @@ class BucketlistView(Resource):
             # Check if request is a search request
             search_name = request.args.get('q')
             if search_name:
-                bucketlist = BucketList.query.filter_by(name=search_name,
-                                                        created_by=user_id
-                                                        ).all()
+                # Check for the occurrence of the word given in all the
+                # bucket lists that belongs to the logged in user
+                bucketlist = BucketList.query.filter(
+                    BucketList.name.ilike("%{}%".format(search_name))
+                     ).filter_by(created_by=user_id).limit(page_limit).all()
                 return marshal(bucketlist, bucketlist_output), 200
             # If not a search request then gets all bucket lists
             # TODO
@@ -248,11 +251,13 @@ class BucketListItemView(Resource):
                bucketlist_id=bucketlist_id, created_by=user_id).first():
             return {'Error': 'Unexisting bucket'}, 404
         if search_name:
-            items = BucketListItem.query.filter_by(
-                                        bucketlist_id=bucketlist_id,
-                                        name=search_name).limit(page_limit
-                                                                ).offset(
-                                        page_offset).all()
+            # Check for the occurrence of the word given in all the
+            # bucketlist items that belongs to the logged in user
+            # and the specified bucketlist
+            items = BucketListItem.query.filter(
+                BucketListItem.name.ilike("%{}%".format(search_name))
+                ).filter_by(bucketlist_id=bucketlist_id
+                            ).limit(page_limit).all()
             return marshal(items, item_output), 200
         # If not a search request then gets all bucket lists
         items = BucketListItem.query.filter_by(
