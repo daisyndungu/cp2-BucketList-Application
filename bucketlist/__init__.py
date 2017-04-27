@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_jwt import jwt
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 

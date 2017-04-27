@@ -1,11 +1,8 @@
-import status
-
-from flask import request, jsonify, make_response, json, g
-from flask_httpauth import HTTPTokenAuth
-from flask_restful import Api, Resource, marshal, fields, reqparse
+from flask import jsonify, make_response
+from flask_restful import Resource, reqparse
 from sqlalchemy.exc import SQLAlchemyError
 
-from bucketlist.models import User
+from bucketlist.models import User, db
 
 
 class UserRegistration(Resource):

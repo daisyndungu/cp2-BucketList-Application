@@ -1,10 +1,8 @@
-import time
 import datetime
 
 from flask_jwt import jwt
 
 from bucketlist import db, app
-from bucketlist.config import configurations
 
 
 class AddUpdateDelete():

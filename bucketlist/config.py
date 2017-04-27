@@ -34,6 +34,7 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = True
 
+
 configurations = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,

@@ -1,8 +1,6 @@
-import status
-
 from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource, marshal, fields, reqparse
-from flask import request, jsonify, make_response, json, g, make_response
+from flask import request, jsonify, make_response, g
 
 from bucketlist import api, db
 from bucketlist.auth import authorize_token
@@ -252,12 +250,15 @@ class BucketListItemView(Resource):
         if search_name:
             items = BucketListItem.query.filter_by(
                                         bucketlist_id=bucketlist_id,
-                                        name=search_name).all()
+                                        name=search_name).limit(page_limit
+                                                                ).offset(
+                                        page_offset).all()
             return marshal(items, item_output), 200
         # If not a search request then gets all bucket lists
         items = BucketListItem.query.filter_by(
                                         bucketlist_id=bucketlist_id).all()
         return marshal(items, item_output), 200
+
 
 api.add_resource(BucketlistView, '/bucketlists/', endpoint='add_bucketlist')
 api.add_resource(BucketlistView, '/bucketlists/<int:bucketlist_id>',
@@ -269,6 +270,3 @@ api.add_resource(BucketListItemView,
                  endpoint='UpdateDelete_bucketlist_item')
 api.add_resource(UserRegistration, '/auth/register', endpoint='register')
 api.add_resource(UserLogin, '/auth/login', endpoint='login')
-
-if __name__ == '__main__':
-    app.run()
