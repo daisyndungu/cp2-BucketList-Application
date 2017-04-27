@@ -2,9 +2,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource, marshal, fields, reqparse
 from flask import request, jsonify, make_response, g
 
-from bucketlist import api, db
+from bucketlist import db
 from bucketlist.auth import authorize_token
-from bucketlist.user import UserRegistration, UserLogin
+
 from bucketlist.models import BucketList, BucketListItem
 
 
@@ -258,15 +258,3 @@ class BucketListItemView(Resource):
         items = BucketListItem.query.filter_by(
                                         bucketlist_id=bucketlist_id).all()
         return marshal(items, item_output), 200
-
-
-api.add_resource(BucketlistView, '/bucketlists/', endpoint='add_bucketlist')
-api.add_resource(BucketlistView, '/bucketlists/<int:bucketlist_id>',
-                 endpoint='bucketlistview')
-api.add_resource(BucketListItemView, '/bucketlists/<int:bucketlist_id>/items/',
-                 endpoint='create_bucketlist_item')
-api.add_resource(BucketListItemView,
-                 '/bucketlists/<int:bucketlist_id>/items/<int:item_id>',
-                 endpoint='UpdateDelete_bucketlist_item')
-api.add_resource(UserRegistration, '/auth/register', endpoint='register')
-api.add_resource(UserLogin, '/auth/login', endpoint='login')
