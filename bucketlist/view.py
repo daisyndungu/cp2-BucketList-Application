@@ -31,14 +31,14 @@ bucketlist_output = {
 class BucketlistView(Resource):
     # Add authorization decorator to all
     # functions in this class
-    decorators = [authorize_token]
+    # decorators = [authorize_token]
 
     def get(self, bucketlist_id=None):
         """
         Display one buckectlist
         """
         # Get logged in user Id
-        user_id = g.user_id
+        # user_id = g.user_id
         if bucketlist_id:
             # Query one bucketlist
             bucketlist = BucketList.query.filter_by(
@@ -99,9 +99,11 @@ class BucketlistView(Resource):
                         marshal(bucketlist.items, bucketlist_output)
                         }, 200
             # If not a search request then gets all bucket lists
-            bucketlist = (BucketList.query.filter_by(created_by=user_id)
-                          .paginate(page, per_page, False))
-            return paginate(bucketlist, page, per_page)
+            # bucketlist = (BucketList.query.filter_by(created_by=user_id)
+            #               .paginate(page, per_page, False))
+            # return paginate(bucketlist, page, per_page)
+            bucketlists = BucketList.query.all()
+            return marshal(bucketlists, bucketlist_output)
 
 
 def paginate(data, page, per_page):
