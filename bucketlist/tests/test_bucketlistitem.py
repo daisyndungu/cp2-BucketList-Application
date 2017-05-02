@@ -3,7 +3,8 @@ import unittest
 from flask import Flask
 from unittest import TestCase
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, jsonify, g, request, make_response, current_app, json
+from flask import (Flask, jsonify, g, request, make_response,
+                   current_app, json)
 
 from bucketlist.models import db
 
@@ -97,6 +98,29 @@ class InitialTests(TestCase):
     def test_delete_unexisting_bucketlistitem_in_unexisting_bucketlist(self):
         response = self.client.delete("/bucketlist/1/item/1")
         self.assertEqual(response.status_code, 400)
+
+    def test_get_one_bucketlistitem(self):
+        self.bucketlist()
+        self.client.post("/bucketlist/1/item",
+                         data=json.dumps(self.bucketlistitem))
+        response = self.client.get("/bucketlist/1/item/1")
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_one_bucketlistitem_in_unexisting_bucketlist(self):
+        self.client.post("/bucketlist/1/item",
+                         data=json.dumps(self.bucketlistitem))
+        response = self.client.get("/bucketlist/1/item/1")
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_unexisting_bucketlistitem_in_unexisting_bucketlist(self):
+        response = self.client.get("/bucketlist/1/item/1")
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_unexisting_bucketlistitem(self):
+        self.bucketlist()
+        response = self.client.get("/bucketlist/1/item/1")
+        self.assertEqual(response.status_code, 400)
+
 
 if __name__ == "__main__":
     unittest.main()

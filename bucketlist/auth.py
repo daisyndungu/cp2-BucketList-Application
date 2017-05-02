@@ -15,9 +15,9 @@ def decode_auth_token(auth_token):
         return {'response': payload['sub'], 'status': True}
     except jwt.ExpiredSignatureError:
         return {'response': 'Signature expired. Please log in again.',
-                'status': False}
+                'status': False}, 400
     except jwt.InvalidTokenError as e:
-        return {'response': str(e), 'status': False}
+        return {'response': str(e), 'status': False}, 200
 
 
 def authorize_token(func):
