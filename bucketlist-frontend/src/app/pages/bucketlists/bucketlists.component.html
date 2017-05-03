@@ -1,6 +1,22 @@
 <p>
   bucketlists works!
 </p>
-<div *ngFor="let bucketlist of bucketlists">
-  {{ bucketlist.name }}
+<div>
+  <table>
+    <th> BUCKETLISTS </th>
+    <tr>
+      <div *ngFor="let bucketlist of bucketlists">
+        <td>
+          {{ bucketlist.name }}
+        </td>
+        <td>
+          {{ bucketlist.date_created }}
+        </td>
+        <td>
+          <button class="delete" (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
+        </td>
+      </div>
+    </tr>
+  </table>
+  
 </div>

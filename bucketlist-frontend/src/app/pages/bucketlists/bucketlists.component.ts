@@ -22,4 +22,13 @@ export class BucketlistsComponent implements OnInit {
       )
   }
 
+  // delete(bucketlist: BucketList): void {
+  //   this.bucketlistService
+  //   .delete(bucketlist.bucketlist_id)
+  //     .then(() => {
+  //       this.bucketlists = this.bucketlists.filter(h => h !== bucketlist);
+  //       if (this.selectedBucketlist === bucketlist) { this.selectedBucketlist = null; }
+  //     });
+// }
 }
+

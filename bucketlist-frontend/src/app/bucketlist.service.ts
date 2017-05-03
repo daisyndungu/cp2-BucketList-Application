@@ -12,12 +12,27 @@ export class BucketlistService {
   constructor(private http: Http) { }
   getBucketlists(): Observable<any> {
     return this.http
-        .get(`${this.baseUrl}/bucketlists`)
+        .get(`${this.baseUrl}/bucketlists/`)
         .map(response => response.json())
         .catch(this.handleError);
   }
 
+  getBucketlist(bucketlist_id: number): Observable<any> {
+    
+    return this.http
+        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`)
+        .map(response => response.json())
+        .catch(this.handleError);
+  }
+
+  delete(id: number): Observable<void> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.delete(url)
+      .catch(this.handleError);
+  }
+
   private extractData(res: Response) {
+    
 
   }
   
@@ -27,3 +42,4 @@ export class BucketlistService {
   }
 }
 
+ 

@@ -42,7 +42,7 @@ class BucketlistView(Resource):
         if bucketlist_id:
             # Query one bucketlist
             bucketlist = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id, created_by=user_id).first()
+                bucketlist_id=bucketlist_id).first()
             if not bucketlist:
                 return {'Error': 'bucketlist does not exist'}, 400
             return marshal(bucketlist, bucketlist_output), 200
