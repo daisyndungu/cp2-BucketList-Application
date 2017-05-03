@@ -1,27 +1,34 @@
+<h1>
+   MY BUCKETLISTS
+</h1>
 <p>
-  bucketlists works!
+  <button class="edit"
+              (click)="edit(bucketlist); $event.stopPropagation()">Add New</button>
 </p>
-<div>
-  <table>
-    <th> BUCKETLISTS </th>
-    <tr>
-      <td>Buckelist Title</td>
-    </tr>
-    <tr>
+<body>
+  <div>
+    <table>
+      <tr>
+        <td>Buckelist Title</td>
+        <td>Edit bucketlist</td>
+        <td>Delete bucketlist</td>
+      </tr>
       <div *ngFor="let bucketlist of bucketlists">
-        <td>
-          {{ bucketlist.name }}
-        </td>
-        <td>
-          <button class="delete"
-            (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
-        </td>
-         <td>
-          <button class="delete"
-            (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
-        </td>
+        <tr>
+          <td>
+            {{ bucketlist.name }}
+          </td>
+          <td>
+            <button class="edit"
+              (click)="edit(bucketlist); $event.stopPropagation()">edit</button>
+          </td>
+          <td>
+            <button class="delete"
+              (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
+          </td>
+        </tr>
       </div>
-    </tr>
-  </table>
-  
-</div>
+    </table>
+    
+  </div>
+</body>

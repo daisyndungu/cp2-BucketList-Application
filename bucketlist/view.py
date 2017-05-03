@@ -133,7 +133,7 @@ class BucketlistView(Resource):
         """
         Add a new bucket list
         """
-        user_id = g.user_id
+        # user_id = g.user_id
         # Get users input
         request_dict = request.get_json()
         if not request_dict:
@@ -142,8 +142,7 @@ class BucketlistView(Resource):
             return response, 400
         else:
             try:
-                bucketlist = BucketList(name=request_dict["name"],
-                                        created_by=user_id)
+                bucketlist = BucketList(name=request_dict["name"])
                 bucketlist.add(bucketlist)
                 return {'Done': 'Bucketlist saved successfully'}, 201
             except SQLAlchemyError:
@@ -151,7 +150,7 @@ class BucketlistView(Resource):
                 # with the same name already exists
                 db.session.rollback()
                 response = make_response(jsonify(
-                            {"Error": " The bucketlist entered already exists"}
+                            {"Error": " The bucketlist entered already exists"} 
                             ), 400)
 
                 return response
@@ -160,9 +159,9 @@ class BucketlistView(Resource):
         """
         Edit a bucketlist name
         """
-        user_id = g.user_id
+        # user_id = g.user_id
         bucketlist = BucketList.query.filter_by(
-                    bucketlist_id=bucketlist_id, created_by=user_id).first()
+                    bucketlist_id=bucketlist_id).first()
         try:
             if bucketlist:
                 bucketlist_dict = request.get_json()
