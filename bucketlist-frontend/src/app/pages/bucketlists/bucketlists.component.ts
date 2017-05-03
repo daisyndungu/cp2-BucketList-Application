@@ -13,6 +13,7 @@ export class BucketlistsComponent implements OnInit {
   ngOnInit() {
     this.getBucketlists();
     console.log(this.bucketlists);
+    
   }
 
   getBucketlists(): void {
@@ -21,14 +22,15 @@ export class BucketlistsComponent implements OnInit {
         bucketlists => this.bucketlists = bucketlists
       )
   }
+  
+  delete(bucketlist): void {
+    this.bucketlistService.delete(bucketlist.bucketlist_id).subscribe(
+      
+        
+      )
 
-  // delete(bucketlist: BucketList): void {
-  //   this.bucketlistService
-  //   .delete(bucketlist.bucketlist_id)
-  //     .then(() => {
-  //       this.bucketlists = this.bucketlists.filter(h => h !== bucketlist);
-  //       if (this.selectedBucketlist === bucketlist) { this.selectedBucketlist = null; }
-  //     });
-// }
+    }
+    
 }
+
 

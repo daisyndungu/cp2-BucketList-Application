@@ -106,28 +106,28 @@ class BucketlistView(Resource):
             return marshal(bucketlists, bucketlist_output)
 
 
-def paginate(data, page, per_page):
-    if not data:
-        return {'Error': 'There are no datas at the moment'}, 400
+# def paginate(data, page, per_page):
+#     if not data:
+#         return {'Error': 'There are no datas at the moment'}, 400
 
-    if data.has_next:
-        url_next = ('http://' + request.host + url_for
-                    (request.endpoint) + '?page=' + str(page + 1) +
-                    '&per_page=' + str(per_page))
-    else:
-        url_next = 'Null'
+#     if data.has_next:
+#         url_next = ('http://' + request.host + url_for
+#                     (request.endpoint) + '?page=' + str(page + 1) +
+#                     '&per_page=' + str(per_page))
+#     else:
+#         url_next = 'Null'
 
-    if data.has_prev:
-        url_prev = ('http://' + request.host + url_for
-                    (request.endpoint) + '?page=' + str(page - 1) +
-                    '&per_page=' + str(per_page))
-    else:
-        url_prev = 'Null'
-    return {'meta': {'next_page': url_next,
-                     'previous_page': url_prev,
-                     'total_pages': data.pages},
-            'bucketlist': marshal(data.items, bucketlist_output)
-            }, 200
+#     if data.has_prev:
+#         url_prev = ('http://' + request.host + url_for
+#                     (request.endpoint) + '?page=' + str(page - 1) +
+#                     '&per_page=' + str(per_page))
+#     else:
+#         url_prev = 'Null'
+#     return {'meta': {'next_page': url_next,
+#                      'previous_page': url_prev,
+#                      'total_pages': data.pages},
+#             'bucketlist': marshal(data.items, bucketlist_output)
+#             }, 200
 
     def post(self):
         """
@@ -179,9 +179,9 @@ def paginate(data, page, per_page):
         """
         Remove a bucketlist from the database
         """
-        user_id = g.user_id
+        # user_id = g.user_id
         bucketlist = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id, created_by=user_id).first()
+                bucketlist_id=bucketlist_id).first()
         if bucketlist:
             bucketlist.delete(bucketlist)
             return 'Bucketlist deleted Successfully', 200

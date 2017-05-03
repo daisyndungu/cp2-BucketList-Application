@@ -26,7 +26,7 @@ export class BucketlistService {
   }
 
   delete(id: number): Observable<void> {
-    const url = `${this.baseUrl}/${id}`;
+    const url = `${this.baseUrl}` + `/bucketlists/` + `${id}`;
     return this.http.delete(url)
       .catch(this.handleError);
   }

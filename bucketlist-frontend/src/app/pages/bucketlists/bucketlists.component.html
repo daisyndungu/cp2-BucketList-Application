@@ -5,15 +5,20 @@
   <table>
     <th> BUCKETLISTS </th>
     <tr>
+      <td>Buckelist Title</td>
+    </tr>
+    <tr>
       <div *ngFor="let bucketlist of bucketlists">
         <td>
           {{ bucketlist.name }}
         </td>
         <td>
-          {{ bucketlist.date_created }}
+          <button class="delete"
+            (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
         </td>
-        <td>
-          <button class="delete" (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
+         <td>
+          <button class="delete"
+            (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
         </td>
       </div>
     </tr>
