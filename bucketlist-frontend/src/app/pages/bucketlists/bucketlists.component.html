@@ -1,10 +1,13 @@
 <h1>
    MY BUCKETLISTS
 </h1>
-<p>
-  <button class="edit"
-              (click)="edit(bucketlist); $event.stopPropagation()">Add New</button>
-</p>
+<div>
+  <label>New Bucketlist name:</label> <input #bucketlistName />
+  <button (click)="add(bucketlistName.value); bucketlistName.value=''">
+    Add
+  </button>
+</div>
+<bucketlist-search></bucketlist-search>
 <body>
   <div>
     <table>
@@ -19,6 +22,7 @@
             {{ bucketlist.name }}
           </td>
           <td>
+            <!--DOING-->
             <button class="edit"
               (click)="edit(bucketlist); $event.stopPropagation()">edit</button>
           </td>
