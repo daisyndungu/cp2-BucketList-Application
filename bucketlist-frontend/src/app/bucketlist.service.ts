@@ -67,6 +67,12 @@ export class BucketlistService {
                .map(response => response.json());
   }
 
+  deleteItem(item_id: number, bucketlist_id: number): Observable<any[]> {
+    const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/` + `${item_id}`;
+    return this.http.delete(url)
+      .catch(this.handleError);
+  }
+
   private extractData(res: Response) {
     
 

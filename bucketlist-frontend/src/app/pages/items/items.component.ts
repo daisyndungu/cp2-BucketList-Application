@@ -30,10 +30,16 @@ export class ItemsComponent implements OnInit {
       // Returns the updated list of all bucketlists
       
         () => this.getItems(this.bucketlist_id)
-        );
-
-     
+        ); 
   }
+
+  delete(item_id, bucketlist_id): void {
+    // Delete a bucketlist by its ID
+    this.bucketlistService.deleteItem(item_id, this.bucketlist_id).subscribe(
+      // Returns the updated list of all bucketlists
+        () => this.getItems(this.bucketlist_id));
+
+    }
 
   ngOnInit() {
     this.getItems(this.bucketlist_id);
