@@ -14,7 +14,7 @@ export class BucketlistService {
   constructor(private http: Http) { }
   getBucketlists(): Observable<any> {
     return this.http
-        .get(`${this.baseUrl}/bucketlists/`)
+        .get(`${this.baseUrl}/bucketlists`)
         .map(response => response.json())
         .catch(this.handleError);
   }

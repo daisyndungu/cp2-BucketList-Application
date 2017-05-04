@@ -32,7 +32,7 @@ getBucketlist(bucketlist_id): any {
   }
 
 goBack(): void {
-  this.router.navigate(['bucketlists/']);
+  this.router.navigate(['bucketlists']);
 }
 
 save(name: string, bucketlist_id: number): void {
