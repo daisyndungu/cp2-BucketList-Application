@@ -1,6 +1,11 @@
-<p>
-  One Bucketlist!
-</p>
-<div>
-  {{ bucketlist.name }}
+<div *ngIf="bucketlist">
+  <h2>{{bucketlist.name}} details!</h2>
+  <div>
+    <label>id: </label>{{bucketlist.bucketlist_id}}</div>
+  <div>
+    <label>name: </label>
+    <input [(ngModel)]="bucketlist.name" placeholder="name" />
+   </div>
+  <button (click)="goBack()">Back</button>
+  <button (click)="save(bucketlist.name, bucketlist.bucketlist_id)">Save</button>
 </div>

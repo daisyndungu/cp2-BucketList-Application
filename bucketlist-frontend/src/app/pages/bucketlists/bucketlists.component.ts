@@ -50,15 +50,19 @@ add(name: string): void {
 
     }
 
-  edit(name, bucketlist_id): void {
-    name = name.trim();
-    if (!name) { return; }
-    // Edit a bucketlist by its ID
-    this.bucketlistService.update(name, bucketlist_id).subscribe(
-      // Returns the updated list of all bucketlists
-        () => this.getBucketlists());
+  edit(id): void {
+    
+    this.router.navigate(['bucketlists/' + id]);
+  }
+  // edit(name, bucketlist_id): void {
+  //   name = name.trim();
+  //   if (!name) { return; }
+  //   // Edit a bucketlist by its ID
+  //   this.bucketlistService.update(name, bucketlist_id).subscribe(
+  //     // Returns the updated list of all bucketlists
+  //       () => this.getBucketlists());
 
-    }
+  //   }
      
 }
 
