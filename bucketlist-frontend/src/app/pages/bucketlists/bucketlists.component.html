@@ -30,6 +30,10 @@
             <button class="delete"
               (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
           </td>
+          <td>
+            <button class="items"
+              (click)="items(bucketlist.bucketlist_id); $event.stopPropagation()">items</button>
+          </td>
         </tr>
       </div>
     </table>

@@ -10,7 +10,7 @@ import { BucketlistService } from '../../bucketlist.service'
   styleUrls: ['./bucketlist.component.css']
 })
 export class BucketlistComponent implements OnInit {
-  bucketlist: string;
+  bucketlist: number;
   constructor(route: ActivatedRoute, private bucketlistService: BucketlistService) { 
     this.bucketlist = route.snapshot.params['id']
   }

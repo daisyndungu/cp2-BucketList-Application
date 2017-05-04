@@ -1,0 +1,51 @@
+<h1>
+   MY BUCKETLIST ITEMS
+</h1>
+<div>
+  <label>New Item name:</label> <input #itemName />
+  <label>Description :</label> <input #itemDesc />
+  <label>Status :</label> <input #itemStatus />
+  <button (click)="add(itemName.value, itemDesc.value, itemStatus.value);
+  itemName.value=''; itemDesc.value=''; itemStatus.value=''">
+    Add
+  </button>
+</div>
+<body>
+  <div>
+    <table>
+      <tr>
+        <td>Item Name</td>
+        <td>Item Description</td>
+        <td>Item Status</td>
+        <td>Edit bucketlist</td>
+        <td>Delete bucketlist</td>
+      </tr>
+      <div *ngIf="items.length == 0">
+        There are no Items at the moment
+      </div>
+      <div *ngFor="let item of items">
+        <tr>
+          <td>
+            {{ item.name }}
+          </td>
+          <td>
+            {{ item.description }}
+          </td>
+          <td>
+            {{ item.status }}
+          </td>
+          <td>
+            <!--DOING-->
+            <button class="edit"
+              (click)="edit(item); $event.stopPropagation()">edit</button>
+          </td>
+          <td>
+            <button class="delete"
+              (click)="delete(item); $event.stopPropagation()">delete</button>
+          </td>
+        </tr>
+      </div>
+    </table>
+    
+  </div>
+</body>

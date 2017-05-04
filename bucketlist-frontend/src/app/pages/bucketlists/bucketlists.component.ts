@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router }            from '@angular/router';
+
 import { BucketlistService } from '../../bucketlist.service'
+import { BucketlistComponent } from '../bucketlist/bucketlist.component'
 
 @Component({
   selector: 'app-bucketlists',
@@ -8,11 +11,12 @@ import { BucketlistService } from '../../bucketlist.service'
 })
 export class BucketlistsComponent implements OnInit {
   bucketlists: any[] = [];
-  constructor(private bucketlistService: BucketlistService) { }
+  constructor(private bucketlistService: BucketlistService,
+    private router: Router) { }
 
   ngOnInit() {
     this.getBucketlists();
-    console.log(this.bucketlists);
+    // this.items(id):
     
   }
 
@@ -34,6 +38,10 @@ add(name: string): void {
       )
   }
   
+  items(id): void {
+    this.router.navigate(['bucketlists/' + id + '/items']);
+  }
+
   delete(bucketlist): void {
     // Delete a bucketlist by its ID
     this.bucketlistService.delete(bucketlist.bucketlist_id).subscribe(
@@ -42,14 +50,16 @@ add(name: string): void {
 
     }
 
-  edit(bucketlist): void {
+  edit(name, bucketlist_id): void {
+    name = name.trim();
+    if (!name) { return; }
     // Edit a bucketlist by its ID
-    this.bucketlistService.update(bucketlist.bucketlist_id).subscribe(
+    this.bucketlistService.update(name, bucketlist_id).subscribe(
       // Returns the updated list of all bucketlists
         () => this.getBucketlists());
 
     }
-    
+     
 }
 
 

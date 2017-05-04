@@ -1,0 +1,23 @@
+button.delete {
+  float:right;
+  margin-top: 2px;
+  margin-right: .8em;
+  background-color: #960000 !important;
+  color:white;
+}
+
+button.edit {
+  float:right;
+  margin-top: 2px;
+  margin-right: .8em;
+  background-color: royalblue !important;
+  color:white;
+}
+
+button.items {
+  float:right;
+  margin-top: 2px;
+  margin-right: .8em;
+  background-color: green !important;
+  color:white;
+}

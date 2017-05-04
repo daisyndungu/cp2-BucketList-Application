@@ -24,8 +24,8 @@ class User(db.Model, AddUpdateDelete):
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(128))
-    bucketlist = db.relationship('BucketList', backref='user',
-                                 cascade='all,delete', passive_deletes=True)
+    # bucketlist = db.relationship('BucketList', backref='user',
+    #                              cascade='all,delete', passive_deletes=True)
 
     def generate_auth_token(self, id):
         """
@@ -59,13 +59,13 @@ class BucketList(db.Model, AddUpdateDelete):
                               onupdate=datetime.datetime.now)
     items = db.relationship('BucketListItem', backref='bucketlist',
                             cascade='all,delete', passive_deletes=True)
-    created_by = db.Column(db.Integer, db.ForeignKey('user.id',
-                           onupdate="CASCADE",
-                           ondelete="CASCADE"), nullable=False)
+    # created_by = db.Column(db.Integer, db.ForeignKey('user.id',
+    #                        onupdate="CASCADE",
+    #                        ondelete="CASCADE"), nullable=False)
 
-    def __init__(self, name, created_by):
+    def __init__(self, name):
         self.name = name
-        self.created_by = created_by
+        # self.created_by = created_by
 
 
 class BucketListItem(db.Model, AddUpdateDelete):

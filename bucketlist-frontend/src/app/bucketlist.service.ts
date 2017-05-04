@@ -7,7 +7,7 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class BucketlistService {
-  private headers = new Headers({"Content-Type":"application/json"});
+  private headers = new Headers({"Content-Type": "application/json"});
   private baseUrl = 'http://127.0.0.1:5000';  // URL to web api
   
   
@@ -27,13 +27,32 @@ export class BucketlistService {
         .catch(this.handleError);
   }
 
+  getItems(bucketlist_id: number): Observable<any> {
+    
+    return this.http
+        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/`)
+        .map(response => response.json())
+        .catch(this.handleError);
+  }
+
   delete(id: number): Observable<void> {
     const url = `${this.baseUrl}` + `/bucketlists/` + `${id}`;
     return this.http.delete(url)
       .catch(this.handleError);
   }
 
-  
+  update(name: any, bucketlist_id: number): Observable<any> {
+    const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`;
+    return this.http.put(url, JSON.stringify({'name': name}), {headers: this.headers})
+      .catch(this.handleError);
+  }
+
+  search(term: string): Observable<any> {
+    const url = `${this.baseUrl}` + `/bucketlists/` + `?q=${term}`;
+    return this.http
+               .get(url)
+               .map(response => response.json());
+  }
   add(name: string): Observable<any> {
     const url = `${this.baseUrl}` + `/bucketlists/`;
     return this.http
@@ -41,8 +60,15 @@ export class BucketlistService {
                .map(response => response.json());
   }
 
+  addItem(name: string, description: string, status: string, bucketlist_id: number): Observable<any[]> {
+    const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/`;
+    return this.http
+               .post(url, JSON.stringify({'name': name, 'description': description, 'status': status}), {headers: this.headers})
+               .map(response => response.json());
+  }
+
   private extractData(res: Response) {
-    console.log(name)
+    
 
   }
   
