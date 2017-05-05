@@ -35,4 +35,14 @@ export class ItemComponent implements OnInit {
   }
 
 
+  goBack(): void {
+    this.router.navigate(['bucketlists/' + this.id + '/items']);
+  }
+
+  save(name: any, description: any, status: any, bucketlist_id: number,  item_id: number): void {
+    this.bucketlistService.updateItem(name, description, status, this.id, this.item_id).subscribe(
+      () =>  this.getItem(this.id, this.item_id));
+    
+  }
+
 }

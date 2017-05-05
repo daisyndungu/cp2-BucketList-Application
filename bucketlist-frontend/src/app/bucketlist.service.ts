@@ -80,6 +80,13 @@ export class BucketlistService {
       .catch(this.handleError);
   }
 
+  updateItem(name: any, description: any, status: any, bucketlist_id: number, item_id: number): Observable<any> {
+    const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/` + `${item_id}`;
+    return this.http.put(url, JSON.stringify({'name': name, 'description': description, 'status': status}),
+    {headers: this.headers})
+      .catch(this.handleError);
+  }
+
   private extractData(res: Response) {
     
 
