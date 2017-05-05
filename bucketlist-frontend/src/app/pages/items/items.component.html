@@ -14,11 +14,9 @@
   <div>
     <table>
       <tr>
-        <td>Item Name</td>
-        <td>Item Description</td>
-        <td>Item Status</td>
-        <td>Edit bucketlist</td>
-        <td>Delete bucketlist</td>
+        <td> Name</td>
+        <td> Description</td>
+        <td> Status</td>
       </tr>
       <div *ngIf="items.length == 0">
         There are no Items at the moment
@@ -37,7 +35,7 @@
           <td>
             <!--DOING-->
             <button class="edit"
-              (click)="edit(item); $event.stopPropagation()">edit</button>
+              (click)="edit(item.item_id); $event.stopPropagation()">edit</button>
           </td>
           <td>
             <button class="delete"
