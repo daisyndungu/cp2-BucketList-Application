@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import { Router }            from '@angular/router';
 
 import { BucketlistService } from '../../bucketlist.service'
 
@@ -11,7 +12,8 @@ import { BucketlistService } from '../../bucketlist.service'
 export class ItemsComponent implements OnInit {
   items: any[] = [];
   bucketlist_id: number;
-  constructor(route: ActivatedRoute, private bucketlistService: BucketlistService) { 
+  constructor(route: ActivatedRoute, private bucketlistService: BucketlistService,
+  private router: Router) { 
     this.bucketlist_id = route.snapshot.params['id']
   }
   getItems(bucketlist_id): void {
@@ -40,6 +42,11 @@ export class ItemsComponent implements OnInit {
         () => this.getItems(this.bucketlist_id));
 
     }
+
+  edit(id): void {
+    
+    this.router.navigate(['bucketlists/'+ this.bucketlist_id + '/items/' + id]);
+  }
 
   ngOnInit() {
     this.getItems(this.bucketlist_id);
