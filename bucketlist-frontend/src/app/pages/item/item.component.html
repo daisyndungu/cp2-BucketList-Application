@@ -1,0 +1,18 @@
+<p>
+  item works!
+</p>
+<div *ngIf="item">
+  <h2>{{item.name}} details!</h2>
+  <div>
+    <label>id: </label>{{item.item_id}}</div>
+  <div>
+    <label>name: </label>
+    <input [(ngModel)]="item.name" placeholder="name" />
+    <label>Description: </label>
+    <input [(ngModel)]="item.description" placeholder="description" />
+    <label>Status: </label>
+    <input [(ngModel)]="item.status" placeholder="status" />
+   </div>
+  <button (click)="goBack()">Back</button>
+  <button (click)="save(item.name, item.description, item.status, item.item_id)">Save</button>
+</div>

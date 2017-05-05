@@ -3,7 +3,6 @@ import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-// import { Bucketlist } from './bucketlist';
 
 @Injectable()
 export class BucketlistService {
@@ -31,6 +30,14 @@ export class BucketlistService {
     
     return this.http
         .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/`)
+        .map(response => response.json())
+        .catch(this.handleError);
+  }
+
+  getItem(bucketlist_id: number, item_id: number): Observable<any> {
+    
+    return this.http
+        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/` + `${item_id}`)
         .map(response => response.json())
         .catch(this.handleError);
   }

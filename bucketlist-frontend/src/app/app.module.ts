@@ -11,13 +11,15 @@ import { BucketlistSearchComponent } from './pages/bucketlist-search/bucketlist-
 import { ItemsComponent } from './pages/items/items.component';
 
 import { BucketlistService } from './bucketlist.service';
+import { ItemComponent } from './pages/item/item.component';
 
 
 
 const appRoutes: Routes = [
   { path: 'bucketlists', component: BucketlistsComponent },
   { path: 'bucketlists/:id', component: BucketlistComponent },
-  { path: 'bucketlists/:id/items', component: ItemsComponent }
+  { path: 'bucketlists/:id/items', component: ItemsComponent },
+  { path: 'bucketlists/:id/items/:item_id', component: ItemComponent }
 ];
 
 @NgModule({
@@ -26,7 +28,8 @@ const appRoutes: Routes = [
     BucketlistsComponent,
     BucketlistComponent,
     BucketlistSearchComponent,
-    ItemsComponent
+    ItemsComponent,
+    ItemComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
