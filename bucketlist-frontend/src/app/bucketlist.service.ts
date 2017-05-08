@@ -6,11 +6,21 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class BucketlistService {
-  private headers = new Headers({"Content-Type": "application/json"});
+  private headers = new Headers(
+    {
+      "Content-Type": "application/json"
+    });
   private baseUrl = 'http://127.0.0.1:5000';  // URL to web api
   
   
   constructor(private http: Http) { }
+  addUser(username: string, email: string, password: string): Observable<any> {
+    const url = `${this.baseUrl}` + `/auth/register`;
+    return this.http
+               .post(url, JSON.stringify({'username': username, 'email': email, 'password': password}), {headers: this.headers})
+               .map(response => response.json());
+  }
+
   getBucketlists(): Observable<any> {
     return this.http
         .get(`${this.baseUrl}/bucketlists`)

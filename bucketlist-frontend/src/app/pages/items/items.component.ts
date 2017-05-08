@@ -48,6 +48,10 @@ export class ItemsComponent implements OnInit {
     this.router.navigate(['bucketlists/'+ this.bucketlist_id + '/items/' + id]);
   }
 
+  goBack(): void {
+    this.router.navigate(['bucketlists']);
+  }
+
   ngOnInit() {
     this.getItems(this.bucketlist_id);
     console.log(this.bucketlist_id)

@@ -1,0 +1,12 @@
+<p>
+  user-registration works!
+</p>
+<div>
+  <label>Username:</label> <input #userName />
+  <label>Email :</label> <input #email />
+  <label>password :</label> <input #password />
+  <button (click)="addUser(userName.value, email.value, password.value);
+  userName.value=''; email.value=''; password.value=''">
+    Sign In
+  </button>
+</div>
