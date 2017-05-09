@@ -2,12 +2,17 @@
    MY BUCKETLISTS
 </h1>
 <div>
-  <label>New Bucketlist name:</label> <input #bucketlistName />
+  <input #bucketlistName placeholder="New Bucketlist"/>
   <button (click)="add(bucketlistName.value); bucketlistName.value=''">
     Add
   </button>
 </div>
-<!--<bucketlist-search></bucketlist-search>-->
+<div class="search">
+  <input #searchName placeholder="Search"/>
+  <button (click)="search(searchName.value); searchName.value=''">
+    Search
+  </button>
+</div>
 <body>
   <div>
     <table>
@@ -35,8 +40,11 @@
               (click)="items(bucketlist.bucketlist_id); $event.stopPropagation()">items</button>
           </td>
         </tr>
+        
       <!--</div>-->
     </table>
-    
   </div>
+  <!--<div  *ngIf=showButton>   -->
+    <button *ngIf=showButton (click)="goBack()">Back</button>
+  <!--</div>-->
 </body>

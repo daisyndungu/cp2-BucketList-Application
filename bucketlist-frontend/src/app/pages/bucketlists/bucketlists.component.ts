@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-// semi colons
-import { Router }            from '@angular/router';
+import { Component, OnInit } from '@angular/core'
+import { Router }            from '@angular/router'
 
 import { BucketlistService } from '../../bucketlist.service'
 import { BucketlistComponent } from '../bucketlist/bucketlist.component'
@@ -13,6 +12,7 @@ import { BucketlistComponent } from '../bucketlist/bucketlist.component'
 // ../../../assets/bootstrap/css/bootstrap-theme.min.css
 export class BucketlistsComponent implements OnInit {
   bucketlists: any[] = [];
+  showButton=false;
   constructor(private bucketlistService: BucketlistService,
     private router: Router) { }
 
@@ -56,6 +56,24 @@ add(name: string): void {
     
     this.router.navigate(['bucketlists/' + id]);
   }
+
+  goBack(): void {
+    this.getBucketlists();
+    this.showButton=false
+  }
+
+  search(name): any {
+    name = name.trim();
+    if (!name) { return; }
+    // this.bucketlistService.search(name)
+      // this.router.navigate(['bucketlists'], {queryParams:{q:name}});
+      this.bucketlistService.search(name).subscribe(
+        bucketlists => this.bucketlists = bucketlists
+        
+        );
+        this.showButton=true
+    }
+  
      
 }
 
