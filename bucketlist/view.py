@@ -71,33 +71,34 @@ class BucketlistView(Resource):
                 # bucket lists that belongs to the logged in user
                 bucketlist = (BucketList.query.filter(
                     BucketList.name.ilike("%{}%".format(search_name))
-                     ).filter_by(created_by=user_id)
-                      .paginate(page, per_page, False))
-                if not bucketlist:
-                    return {'Error': 'No results for that name'}, 400
+                     ).filter_by(created_by=user_id).all())
+                return marshal(bucketlist, bucketlist_output)
 
-                if bucketlist.has_next:
-                    url_next = ('http://' + request.host + url_for
-                                (request.endpoint) + '?page=' +
-                                str(page + 1) + '&per_page=' + str(per_page) +
-                                '&q={}'.format(search_name))
-                else:
-                    url_next = 'Null'
+                # if not bucketlist:
+                #     return {'Error': 'No results for that name'}, 400
 
-                if bucketlist.has_prev:
-                    url_prev = ('http://' + request.host + url_for
-                                (request.endpoint) + '?page=' + str(page - 1) +
-                                '&per_page=' + str(per_page) +
-                                '&q={}'.format(search_name))
-                else:
-                    url_prev = 'Null'
+                # if bucketlist.has_next:
+                #     url_next = ('http://' + request.host + url_for
+                #                 (request.endpoint) + '?page=' +
+                #                 str(page + 1) + '&per_page=' + str(per_page) +
+                #                 '&q={}'.format(search_name))
+                # else:
+                #     url_next = 'Null'
 
-                return {'meta': {'next_page': url_next,
-                                 'previous_page': url_prev,
-                                 'total_pages': bucketlist.pages},
-                        'bucketlist':
-                        marshal(bucketlist.items, bucketlist_output)
-                        }, 200
+                # if bucketlist.has_prev:
+                #     url_prev = ('http://' + request.host + url_for
+                #                 (request.endpoint) + '?page=' + str(page - 1) +
+                #                 '&per_page=' + str(per_page) +
+                #                 '&q={}'.format(search_name))
+                # else:
+                #     url_prev = 'Null'
+
+                # return {'meta': {'next_page': url_next,
+                #                  'previous_page': url_prev,
+                #                  'total_pages': bucketlist.pages},
+                #         'bucketlist':
+                #         marshal(bucketlist.items, bucketlist_output)
+                #         }, 200
             # If not a search request then gets all bucket lists
             bucketlist = (BucketList.query.filter_by(created_by=user_id)).all()
             # print(bucket)
