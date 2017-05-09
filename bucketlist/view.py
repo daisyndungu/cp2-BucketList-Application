@@ -102,6 +102,7 @@ class BucketlistView(Resource):
             bucketlist = (BucketList.query.filter_by(created_by=user_id)).all()
             # print(bucket)
             return marshal(bucketlist, bucketlist_output), 200
+            # TODO
             # bucketlist = (BucketList.query.filter_by(created_by=user_id)
             #               .paginate(page, per_page, False))
             # return self.paginate(bucketlist, page, per_page)
@@ -190,7 +191,7 @@ class BucketlistView(Resource):
 
 
 class BucketListItemView(Resource):
-    # decorators = [authorize_token]
+    decorators = [authorize_token]
 
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
@@ -204,9 +205,9 @@ class BucketListItemView(Resource):
         """
         Save a new bucketlist item
         """
-        # user_id = g.user_id
+        user_id = g.user_id
         bucketlist_query = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id).first()
+                bucketlist_id=bucketlist_id, created_by=user_id).first()
         if not bucketlist_query:
             return "Invalid bucketlist", 400
         request_dict = self.reqparse.parse_args()
@@ -221,22 +222,20 @@ class BucketListItemView(Resource):
                                   bucketlist_id=bucketlist_id)
             item.add(item)
             return {'Done': 'Bucketlist item saved successfully'}, 201
-        # except SQLAlchemyError:
-        #         # Returns an error if a bucketlist item
-        #         # with the same name already exists
-        #         db.session.rollback()
-        #         return {"Error": " The bucketlist item entered already \
-        #                 exists"}, 400
-        except Exception as e:
-            return {'Error': str(e)}
+        except SQLAlchemyError:
+                # Returns an error if a bucketlist item
+                # with the same name already exists
+                db.session.rollback()
+                return {"Error": " The bucketlist item entered already \
+                        exists"}, 400
 
     def put(self, bucketlist_id, item_id):
         """
         Edit an item's name, description or/and status
         """
-        # user_id = g.user_id
-        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
-                                                 ).first()
+        user_id = g.user_id
+        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id,
+                                                 created_by=user_id).first()
         if bucket_list:
             bucketlist_item = BucketListItem.query.filter_by(
                         item_id=item_id, bucketlist_id=bucketlist_id).first()
@@ -267,9 +266,9 @@ class BucketListItemView(Resource):
         """
         Remove a bucketlist item from the database
         """
-        # user_id = g.user_id
-        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id
-                                                 ).first()
+        user_id = g.user_id
+        bucket_list = BucketList.query.filter_by(bucketlist_id=bucketlist_id,
+                                                 created_by=user_id).first()
         if not bucket_list:
             return {'message': 'Bucketlist does not exist'}, 400
         bucketlist_item = BucketListItem.query.filter_by(
@@ -298,11 +297,11 @@ class BucketListItemView(Resource):
         # Set page offset that controls the starting point within
         # the collection of resource results
         page = args['page']
-        # user_id = g.user_id
+        user_id = g.user_id
         if item_id:
             # Query one bucketlist
             if not BucketList.query.filter_by(
-                   bucketlist_id=bucketlist_id).first():
+                   bucketlist_id=bucketlist_id, created_by=user_id).first():
                 return {'Error': 'Unexisting bucket'}, 404
             item = BucketListItem.query.filter_by(
                                             bucketlist_id=bucketlist_id,
@@ -321,7 +320,7 @@ class BucketListItemView(Resource):
         # Check if request is a search request
         search_name = request.args.get('q')
         if not BucketList.query.filter_by(
-               bucketlist_id=bucketlist_id).first():
+               bucketlist_id=bucketlist_id, created_by=user_id).first():
             return {'Error': 'Unexisting bucket'}, 404
         if search_name:
             # Check for the occurrence of the word given in all the

@@ -73,7 +73,7 @@ export class BucketlistService {
   getItems(bucketlist_id: number): Observable<any> {
     
     return this.http
-        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/`)
+        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/`, {headers: this.authHeader})
         .map(response => response.json())
         .catch(this.handleError);
   }
@@ -81,14 +81,14 @@ export class BucketlistService {
   getItem(bucketlist_id: number, item_id: number): Observable<any> {
     
     return this.http
-        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/` + `${item_id}`)
+        .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/` + `${item_id}`, {headers: this.authHeader})
         .map(response => response.json())
         .catch(this.handleError);
   }
 
   delete(id: number): Observable<void> {
     const url = `${this.baseUrl}` + `/bucketlists/` + `${id}`;
-    return this.http.delete(url)
+    return this.http.delete(url, {headers: this.authHeader})
       .catch(this.handleError);
   }
 
@@ -101,7 +101,7 @@ export class BucketlistService {
   search(term: string): Observable<any> {
     const url = `${this.baseUrl}` + `/bucketlists/` + `?q=${term}`;
     return this.http
-               .get(url)
+               .get(url, {headers: this.authHeader})
                .map(response => response.json());
   }
   add(name: string): Observable<any> {
@@ -127,7 +127,7 @@ export class BucketlistService {
   updateItem(name: any, description: any, status: any, bucketlist_id: number, item_id: number): Observable<any> {
     const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/` + `${item_id}`;
     return this.http.put(url, JSON.stringify({'name': name, 'description': description, 'status': status}),
-    {headers: this.headers})
+    {headers: this.authHeader})
       .catch(this.handleError);
   }
 
