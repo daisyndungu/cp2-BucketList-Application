@@ -1,12 +1,61 @@
-<p>
-  user-registration works!
-</p>
-<div>
-  <label>Username:</label> <input #userName />
-  <label>Email :</label> <input #email />
-  <label>password :</label> <input #password />
-  <button (click)="addUser(userName.value, email.value, password.value);
-  userName.value=''; email.value=''; password.value=''">
-    Sign In
-  </button>
-</div>
+<head>
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="container">
+    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+      <div class="panel panel-info" >
+        <div class="panel-heading">
+            <div class="panel-title">User Registration</div>
+        </div>   
+
+        <div style="padding-top:30px" class="panel-body" >
+          <div class="main-login main-center">
+            <form>
+              <div class="form-group">
+                <label for="name" class="cols-sm-2 control-label">Username:</label>
+                <div class="cols-sm-10">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input #userName />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="name" class="cols-sm-2 control-label">Email:</label>
+                <div class="cols-sm-10">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input #email />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="name" class="cols-sm-2 control-label">password:</label>
+                <div class="cols-sm-10">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input #password />
+                  </div>
+                </div>
+              </div>
+                <!--<label>Email :</label> <input #email />
+                <label>password :</label> <input #password />-->
+              
+              <div class="form-group">
+                <button class="btn btn-primary btn-lg login-button"
+                (click)="addUser(userName.value, email.value, password.value);
+                userName.value=''; email.value=''; password.value=''">
+                  Sign In
+                </button>
+              </div>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

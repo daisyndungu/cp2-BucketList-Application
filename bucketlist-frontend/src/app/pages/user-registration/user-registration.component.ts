@@ -4,7 +4,9 @@ import { BucketlistService } from '../../bucketlist.service'
 @Component({
   selector: 'app-user-registration',
   templateUrl: './user-registration.component.html',
-  styleUrls: ['./user-registration.component.css']
+  styleUrls: ['../../../assets/bootstrap/css/bootstrap-theme.min.css', 
+  "../../../assets/bootstrap/css/bootstrap.css"
+  ]
 })
 export class UserRegistrationComponent implements OnInit {
   constructor(private bucketlistService: BucketlistService) {

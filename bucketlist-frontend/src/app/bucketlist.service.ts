@@ -36,7 +36,6 @@ export class BucketlistService {
     return this.http
                .post(url, JSON.stringify({'username': username, 'password': password}), {headers: this.headers})
                .map((response: Response) => {
-                 console.log(response.json().Token)
                let token = response.json().Token;
                if (token) {
                  this.token = token;

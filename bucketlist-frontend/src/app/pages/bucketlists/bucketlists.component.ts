@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// semi colons
 import { Router }            from '@angular/router';
 
 import { BucketlistService } from '../../bucketlist.service'
