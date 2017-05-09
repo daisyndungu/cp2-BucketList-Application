@@ -7,9 +7,6 @@ import { BucketlistService } from '../../bucketlist.service'
   styleUrls: ['./user-registration.component.css']
 })
 export class UserRegistrationComponent implements OnInit {
-  _username: any;
-  _email: any;
-  _password: any;
   constructor(private bucketlistService: BucketlistService) {
     
    }

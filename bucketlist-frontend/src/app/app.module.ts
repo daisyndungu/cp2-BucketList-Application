@@ -13,6 +13,7 @@ import { ItemsComponent } from './pages/items/items.component';
 import { BucketlistService } from './bucketlist.service';
 import { ItemComponent } from './pages/item/item.component';
 import { UserRegistrationComponent } from './pages/user-registration/user-registration.component';
+import { UserLoginComponent } from './pages/user-login/user-login.component';
 
 
 
@@ -21,7 +22,8 @@ const appRoutes: Routes = [
   { path: 'bucketlists/:id', component: BucketlistComponent },
   { path: 'bucketlists/:id/items', component: ItemsComponent },
   { path: 'bucketlists/:id/items/:item_id', component: ItemComponent },
-  { path: 'auth/register', component: UserRegistrationComponent }
+  { path: 'auth/register', component: UserRegistrationComponent },
+  { path: 'auth/login', component: UserLoginComponent }
   
 ];
 
@@ -33,7 +35,8 @@ const appRoutes: Routes = [
     BucketlistSearchComponent,
     ItemsComponent,
     ItemComponent,
-    UserRegistrationComponent
+    UserRegistrationComponent,
+    UserLoginComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

@@ -1,0 +1,11 @@
+<p>
+  user-login works!
+</p>
+<div>
+  <label>Username:</label> <input #userName />
+  <label>password :</label> <input #password />
+  <button (click)="userLogin(userName.value, password.value);
+  userName.value=''; password.value=''">
+    Log In
+  </button>
+</div>

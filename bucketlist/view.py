@@ -31,18 +31,18 @@ bucketlist_output = {
 class BucketlistView(Resource):
     # Add authorization decorator to all
     # functions in this class
-    # decorators = [authorize_token]
+    decorators = [authorize_token]
 
     def get(self, bucketlist_id=None):
         """
         Display one buckectlist
         """
         # Get logged in user Id
-        # user_id = g.user_id
+        user_id = g.user_id
         if bucketlist_id:
             # Query one bucketlist
             bucketlist = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id).first()
+                bucketlist_id=bucketlist_id, created_by=user_id).first()
             if not bucketlist:
                 return {'Error': 'bucketlist does not exist'}, 400
             return marshal(bucketlist, bucketlist_output), 200
@@ -71,7 +71,7 @@ class BucketlistView(Resource):
                 # bucket lists that belongs to the logged in user
                 bucketlist = (BucketList.query.filter(
                     BucketList.name.ilike("%{}%".format(search_name))
-                     )
+                     ).filter_by(created_by=user_id)
                       .paginate(page, per_page, False))
                 if not bucketlist:
                     return {'Error': 'No results for that name'}, 400
@@ -99,41 +99,41 @@ class BucketlistView(Resource):
                         marshal(bucketlist.items, bucketlist_output)
                         }, 200
             # If not a search request then gets all bucket lists
+            bucketlist = (BucketList.query.filter_by(created_by=user_id)).all()
+            # print(bucket)
+            return marshal(bucketlist, bucketlist_output), 200
             # bucketlist = (BucketList.query.filter_by(created_by=user_id)
             #               .paginate(page, per_page, False))
-            # return paginate(bucketlist, page, per_page)
-            bucketlists = BucketList.query.all()
-            return marshal(bucketlists, bucketlist_output)
+            # return self.paginate(bucketlist, page, per_page)
 
+    def paginate(self, data, page, per_page):
+        if not data:
+            return {'Error': 'There are no datas at the moment'}, 400
 
-# def paginate(data, page, per_page):
-#     if not data:
-#         return {'Error': 'There are no datas at the moment'}, 400
+        if data.has_next:
+            url_next = ('http://' + request.host + url_for
+                        (request.endpoint) + '?page=' + str(page + 1) +
+                        '&per_page=' + str(per_page))
+        else:
+            url_next = 'Null'
 
-#     if data.has_next:
-#         url_next = ('http://' + request.host + url_for
-#                     (request.endpoint) + '?page=' + str(page + 1) +
-#                     '&per_page=' + str(per_page))
-#     else:
-#         url_next = 'Null'
-
-#     if data.has_prev:
-#         url_prev = ('http://' + request.host + url_for
-#                     (request.endpoint) + '?page=' + str(page - 1) +
-#                     '&per_page=' + str(per_page))
-#     else:
-#         url_prev = 'Null'
-#     return {'meta': {'next_page': url_next,
-#                      'previous_page': url_prev,
-#                      'total_pages': data.pages},
-#             'bucketlist': marshal(data.items, bucketlist_output)
-#             }, 200
+        if data.has_prev:
+            url_prev = ('http://' + request.host + url_for
+                        (request.endpoint) + '?page=' + str(page - 1) +
+                        '&per_page=' + str(per_page))
+        else:
+            url_prev = 'Null'
+        return {'meta': {'next_page': url_next,
+                         'previous_page': url_prev,
+                         'total_pages': data.pages},
+                'bucketlist': marshal(data.items, bucketlist_output)
+                }, 200
 
     def post(self):
         """
         Add a new bucket list
         """
-        # user_id = g.user_id
+        user_id = g.user_id
         # Get users input
         request_dict = request.get_json()
         if not request_dict:
@@ -142,7 +142,8 @@ class BucketlistView(Resource):
             return response, 400
         else:
             try:
-                bucketlist = BucketList(name=request_dict["name"])
+                bucketlist = BucketList(name=request_dict["name"],
+                                        created_by=user_id)
                 bucketlist.add(bucketlist)
                 return {'Done': 'Bucketlist saved successfully'}, 201
             except SQLAlchemyError:
@@ -150,7 +151,7 @@ class BucketlistView(Resource):
                 # with the same name already exists
                 db.session.rollback()
                 response = make_response(jsonify(
-                            {"Error": " The bucketlist entered already exists"} 
+                            {"Error": " The bucketlist entered already exists"}
                             ), 400)
 
                 return response
@@ -159,9 +160,9 @@ class BucketlistView(Resource):
         """
         Edit a bucketlist name
         """
-        # user_id = g.user_id
+        user_id = g.user_id
         bucketlist = BucketList.query.filter_by(
-                    bucketlist_id=bucketlist_id).first()
+                    bucketlist_id=bucketlist_id, created_by=user_id).first()
         try:
             if bucketlist:
                 bucketlist_dict = request.get_json()
@@ -178,9 +179,9 @@ class BucketlistView(Resource):
         """
         Remove a bucketlist from the database
         """
-        # user_id = g.user_id
+        user_id = g.user_id
         bucketlist = BucketList.query.filter_by(
-                bucketlist_id=bucketlist_id).first()
+                bucketlist_id=bucketlist_id, created_by=user_id).first()
         if bucketlist:
             bucketlist.delete(bucketlist)
             return 'Bucketlist deleted Successfully', 200
