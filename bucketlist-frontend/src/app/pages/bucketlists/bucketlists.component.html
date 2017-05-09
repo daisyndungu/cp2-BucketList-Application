@@ -11,17 +11,17 @@
 <body>
   <div>
     <table>
-      <tr>
-        <td>Buckelist Title</td>
-        <td>Edit bucketlist</td>
-        <td>Delete bucketlist</td>
+      <tr class="title">
+        <td class="rowTitle">Buckelist Title</td>
+        <td class="rowOthers">Edit bucketlist</td>
+        <td class="rowOthers">Delete bucketlist</td>
+        <td class="rowOthers">Got to Items</td>
       </tr>
-      <div *ngFor="let bucketlist of bucketlists">
-        <tr>
+        <tr *ngFor="let bucketlist of bucketlists">
           <td>
             {{ bucketlist.name }}
           </td>
-          <td>
+          <td class="rowEdit">
             <!--DOING-->
             <button class="edit"
               (click)="edit(bucketlist.bucketlist_id); $event.stopPropagation()">edit</button>
@@ -35,7 +35,7 @@
               (click)="items(bucketlist.bucketlist_id); $event.stopPropagation()">items</button>
           </td>
         </tr>
-      </div>
+      <!--</div>-->
     </table>
     
   </div>

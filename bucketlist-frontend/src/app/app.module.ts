@@ -18,6 +18,7 @@ import { UserLoginComponent } from './pages/user-login/user-login.component';
 
 
 const appRoutes: Routes = [
+  { path: '', redirectTo:'/bucketlists', pathMatch: 'full' },
   { path: 'bucketlists', component: BucketlistsComponent },
   { path: 'bucketlists/:id', component: BucketlistComponent },
   { path: 'bucketlists/:id/items', component: ItemsComponent },

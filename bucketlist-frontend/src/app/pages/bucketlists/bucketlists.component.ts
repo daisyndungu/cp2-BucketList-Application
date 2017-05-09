@@ -9,6 +9,7 @@ import { BucketlistComponent } from '../bucketlist/bucketlist.component'
   templateUrl: './bucketlists.component.html',
   styleUrls: ['./bucketlists.component.css']
 })
+// ../../../assets/bootstrap/css/bootstrap-theme.min.css
 export class BucketlistsComponent implements OnInit {
   bucketlists: any[] = [];
   constructor(private bucketlistService: BucketlistService,
