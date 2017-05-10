@@ -22,7 +22,7 @@
         <td class="rowOthers">Delete bucketlist</td>
         <td class="rowOthers">Got to Items</td>
       </tr>
-        <tr *ngFor="let bucketlist of bucketlists">
+        <tr *ngFor="let bucketlist of bucketlists.bucketlist">
           <td>
             {{ bucketlist.name }}
           </td>
@@ -44,7 +44,5 @@
       <!--</div>-->
     </table>
   </div>
-  <!--<div  *ngIf=showButton>   -->
-    <button *ngIf=showButton (click)="goBack()">Back</button>
-  <!--</div>-->
+  <button *ngIf=showButton (click)="goBack()">Back</button>
 </body>

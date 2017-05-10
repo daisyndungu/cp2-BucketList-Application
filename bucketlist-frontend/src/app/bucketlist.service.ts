@@ -103,6 +103,7 @@ export class BucketlistService {
                .get(url, {headers: this.authHeader})
                .map(response => response.json());
   }
+  // Add a bucketlist
   add(name: string): Observable<any> {
     const url = `${this.baseUrl}` + `/bucketlists/`;
     return this.http

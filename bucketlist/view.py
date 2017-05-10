@@ -53,7 +53,7 @@ class BucketlistView(Resource):
             self.reqparse.add_argument('page', location="args", type=int,
                                        required=False, default=1)
             self.reqparse.add_argument('per_page', location="args", type=int,
-                                       default=2)
+                                       default=3)
             # Set page limit to 20 items per page if the user does not
             # specify a number
             args = self.reqparse.parse_args()
@@ -100,28 +100,26 @@ class BucketlistView(Resource):
                 #         marshal(bucketlist.items, bucketlist_output)
                 #         }, 200
             # If not a search request then gets all bucket lists
-            bucketlist = (BucketList.query.filter_by(created_by=user_id)).all()
+            # bucketlist = (BucketList.query.filter_by(created_by=user_id)).all()
             # print(bucket)
-            return marshal(bucketlist, bucketlist_output), 200
+            # return marshal(bucketlist, bucketlist_output), 200
             # TODO
-            # bucketlist = (BucketList.query.filter_by(created_by=user_id)
-            #               .paginate(page, per_page, False))
-            # return self.paginate(bucketlist, page, per_page)
+            bucketlist = (BucketList.query.filter_by(created_by=user_id)
+                          .paginate(page, per_page, False))
+            return self.paginate(bucketlist, page, per_page)
 
     def paginate(self, data, page, per_page):
         if not data:
             return {'Error': 'There are no datas at the moment'}, 400
 
         if data.has_next:
-            url_next = ('http://' + request.host + url_for
-                        (request.endpoint) + '?page=' + str(page + 1) +
+            url_next = (url_for(request.endpoint) + '?page=' + str(page + 1) +
                         '&per_page=' + str(per_page))
         else:
             url_next = 'Null'
 
         if data.has_prev:
-            url_prev = ('http://' + request.host + url_for
-                        (request.endpoint) + '?page=' + str(page - 1) +
+            url_prev = (url_for(request.endpoint) + '?page=' + str(page - 1) +
                         '&per_page=' + str(per_page))
         else:
             url_prev = 'Null'

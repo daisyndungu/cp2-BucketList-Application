@@ -13,12 +13,12 @@ import { BucketlistComponent } from '../bucketlist/bucketlist.component'
 export class BucketlistsComponent implements OnInit {
   bucketlists: any[] = [];
   showButton=false;
+  pages: any[];
   constructor(private bucketlistService: BucketlistService,
     private router: Router) { }
 
   ngOnInit() {
     this.getBucketlists();
-    // this.items(id):
     
   }
 
@@ -28,15 +28,14 @@ add(name: string): void {
     this.bucketlistService.add(name).subscribe(
       // Returns the updated list of all bucketlists
         () => this.getBucketlists());
-
-     
   }
 
 //  Get All bucketlists
-  getBucketlists(): void {
+  getBucketlists(): any {
     this.bucketlistService.getBucketlists()
       .subscribe(
         bucketlists => this.bucketlists = bucketlists
+        
       )
   }
   
@@ -65,8 +64,6 @@ add(name: string): void {
   search(name): any {
     name = name.trim();
     if (!name) { return; }
-    // this.bucketlistService.search(name)
-      // this.router.navigate(['bucketlists'], {queryParams:{q:name}});
       this.bucketlistService.search(name).subscribe(
         bucketlists => this.bucketlists = bucketlists
         
