@@ -34,7 +34,7 @@ add(name: string): void {
   getBucketlists(): any {
     this.bucketlistService.getBucketlists()
       .subscribe(
-        bucketlists => this.bucketlists = bucketlists
+        bucketlists => this.bucketlists = bucketlists.bucketlist
         
       )
   }

@@ -1,48 +1,48 @@
 <h1>
    MY BUCKETLISTS
 </h1>
-<div>
-  <input #bucketlistName placeholder="New Bucketlist"/>
-  <button (click)="add(bucketlistName.value); bucketlistName.value=''">
-    Add
-  </button>
-</div>
-<div class="search">
-  <input #searchName placeholder="Search"/>
-  <button (click)="search(searchName.value); searchName.value=''">
-    Search
-  </button>
-</div>
-<body>
-  <div>
-    <table>
-      <tr class="title">
-        <td class="rowTitle">Buckelist Title</td>
-        <td class="rowOthers">Edit bucketlist</td>
-        <td class="rowOthers">Delete bucketlist</td>
-        <td class="rowOthers">Got to Items</td>
-      </tr>
-        <tr *ngFor="let bucketlist of bucketlists.bucketlist">
-          <td>
-            {{ bucketlist.name }}
-          </td>
-          <td class="rowEdit">
-            <!--DOING-->
-            <button class="edit"
-              (click)="edit(bucketlist.bucketlist_id); $event.stopPropagation()">edit</button>
-          </td>
-          <td>
-            <button class="delete"
-              (click)="delete(bucketlist); $event.stopPropagation()">delete</button>
-          </td>
-          <td>
-            <button class="items"
-              (click)="items(bucketlist.bucketlist_id); $event.stopPropagation()">items</button>
-          </td>
-        </tr>
-        
-      <!--</div>-->
-    </table>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" (click)="add(bucketlistName.value); bucketlistName.value=''" type="button">Add</button>
+      </span>
+      <input #bucketlistName type="text" class="form-control" placeholder="New bucketlist...">
+    </div>
   </div>
+  <div class="col-lg-6">
+    <div class="input-group">
+      <input type="text" #searchName class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" (click)="search(searchName.value); searchName.value=''">Go!</button>
+      </span>
+    </div>
+  </div>
+</div>
+<br>
+<body>
+  
   <button *ngIf=showButton (click)="goBack()">Back</button>
+
+<div class="bucketlists"  *ngFor="let bucketlist of bucketlists">
+<div class="col-md-4">
+    <button class="items"
+              (click)="items(bucketlist.bucketlist_id); $event.stopPropagation()">
+    <figure class="icon navy col-md-4">
+      <img src="../../assets/images/29962-200.png" alt="sq-sample33" />
+      <figcaption>
+        <h2>{{ bucketlist.name }}</h2>
+        <p>
+          {{ bucketlist.date_created }}
+        </p>
+        <button class="glyphicon glyphicon-pencil"
+              (click)="edit(bucketlist.bucketlist_id); $event.stopPropagation()"></button>
+        <button class="glyphicon glyphicon-trash"
+              (click)="delete(bucketlist); $event.stopPropagation()"></button>
+      </figcaption>
+    </figure>
+    </button>
+</div>
+</div>
 </body>
+<footer></footer>
