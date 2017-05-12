@@ -5,45 +5,41 @@
   <label>New Item name:</label> <input #itemName />
   <label>Description :</label> <input #itemDesc />
   <label>Status :</label> <input #itemStatus />
-  <button (click)="add(itemName.value, itemDesc.value, itemStatus.value);
+  <button type="button" class="btn btn-info" aria-expanded="false" (click)="add(itemName.value, itemDesc.value, itemStatus.value);
   itemName.value=''; itemDesc.value=''; itemStatus.value=''">
     Add
   </button>
 </div>
 <body>
-  <div>
-    <table>
-      <tr>
-        <td> Name</td>
-        <td> Description</td>
-        <td> Status</td>
-      </tr>
-      <div *ngIf="items.length == 0">
-        There are no Items at the moment
-      </div>
-      <div *ngFor="let item of items">
-        <tr>
-          <td>
-            {{ item.name }}
-          </td>
-          <td>
-            {{ item.description }}
-          </td>
-          <td>
-            {{ item.status }}
-          </td>
-          <td>
-            <!--DOING-->
-            <button class="edit"
-              (click)="edit(item.item_id); $event.stopPropagation()">edit</button>
-          </td>
-          <td>
-            <button class="delete"
-              (click)="delete(item.item_id); $event.stopPropagation()">delete</button>
-          </td>
-        </tr>
-      </div>
-    </table>
-  <button (click)="goBack()">Back</button>
+  <div *ngIf="items.length == 0">
+    <strong>There are no Items at the moment</strong>
   </div>
+  <button type="button" class="btn btn-primary" (click)="goBack()">Back</button>
+  <div class="container">
+      <!-- Top Navigation -->
+    <div class="col-md-4" *ngFor="let item of items">
+    <button class="item" (click)="edit(item.item_id); $event.stopPropagation()">
+    <div class="content">
+      <div class="grid">
+        <figure class="item-image">
+          <img *ngIf="item.status === 'False'" src="../../assets/images/todo.png" alt="img11"/>
+          <img *ngIf="item.status === 'True'" src="../../assets/images/done.png" alt="img12"/>
+          
+          <figcaption>
+            <h2><span>{{ item.name }}</span></h2>
+            <p>{{ item.description }} 
+              <br>
+              <button class="glyphicon glyphicon-pencil"
+                (click)="edit(item.item_id); $event.stopPropagation()"></button>
+              <button class="glyphicon glyphicon-trash"
+                  (click)="delete(item.item_id); $event.stopPropagation()"></button>
+            </p>
+          </figcaption>			
+        </figure>
+      </div>
+    </div>
+    </button><br>
+    </div>
+  </div>
+  <button *ngIf="items.length != 0"type="button" class="btn btn-primary" (click)="goBack()">Back</button>
 </body>
