@@ -23,12 +23,11 @@ export class ItemsComponent implements OnInit {
       )
   }
 
-  add(name: string, description: string, status: string): any {
+  add(name: string, description: string): any {
     name = name.trim();
     description = description.trim();
-    status = status.trim();
     if (!name) { return; }
-    this.bucketlistService.addItem(name, description, status, this.bucketlist_id).subscribe(
+    this.bucketlistService.addItem(name, description, this.bucketlist_id).subscribe(
       // Returns the updated list of all bucketlists
       
         () => this.getItems(this.bucketlist_id)

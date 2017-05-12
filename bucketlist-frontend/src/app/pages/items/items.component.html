@@ -4,9 +4,8 @@
 <div>
   <label>New Item name:</label> <input #itemName />
   <label>Description :</label> <input #itemDesc />
-  <label>Status :</label> <input #itemStatus />
-  <button type="button" class="btn btn-info" aria-expanded="false" (click)="add(itemName.value, itemDesc.value, itemStatus.value);
-  itemName.value=''; itemDesc.value=''; itemStatus.value=''">
+  <button type="button" class="btn btn-info" aria-expanded="false" (click)="add(itemName.value, itemDesc.value);
+  itemName.value=''; itemDesc.value=''">
     Add
   </button>
 </div>
