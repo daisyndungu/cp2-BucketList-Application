@@ -12,22 +12,26 @@ import { BucketlistService } from '../../bucketlist.service'
 export class UserLoginComponent implements OnInit {
   loading = false;
   error = '';
-  constructor(private bucketlistService: BucketlistService, private router: Router) { }
+  constructor(private bucketlistService: BucketlistService,
+  private router: Router) { }
 userLogin(username: string, password: string): any {
     username = username.trim();
     password = password.trim();
     if (!username) { return; }
+    if (!password) { return; }
     this.bucketlistService.userLogin(username, password).subscribe(
       result => {
                 if (result === true) {
                     // login successful
                     this.router.navigate(['bucketlists']);
+                    this.router.navigate(['bucketlists']);
                 } else {
                     // login failed
-                    this.error = 'Username or password is incorrect';
-                    this.loading = false;
+                     this.error = ("Invalid Username or password");
                 }
+                
       }
+      
         
         ); 
   }

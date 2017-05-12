@@ -6,18 +6,23 @@
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-4">
       <div class="panel panel-info" >
         <div class="panel-heading">
-            <div class="panel-title">Log In</div>
+            <div class="panel-title">Log In</div><br>
         </div>   
-
+        
         <div style="padding-top:30px" class="panel-body" >
           <div class="main-login main-center">
+            <div *ngIf="error" class="alert alert-danger alert-dismissible" role="alert"> 
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+              {{ error }}
+            </div>
             <form>
               <div class="form-group">
                 <label for="name" class="cols-sm-4 control-label">Username:</label>
                 <div class="cols-sm-12">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input type="text" class="form-control" #userName required="required" />
+                    <input type="text" class="form-control" #userName required/>
               
                   </div>
                 </div>
@@ -44,7 +49,6 @@
                   Register
                 </button>
               </div>
-              
             </form>
           </div>
         </div>
