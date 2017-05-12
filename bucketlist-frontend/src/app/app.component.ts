@@ -3,7 +3,9 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['../assets/bootstrap/css/bootstrap-theme.min.css', 
+  "../assets/bootstrap/css/bootstrap.css"
+  ]
 })
 export class AppComponent {
   title = 'BucketList Api';

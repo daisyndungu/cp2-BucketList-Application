@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core'
+import { Router }            from '@angular/router'
 import { BucketlistService } from '../../bucketlist.service'
 @Component({
   selector: 'app-user-registration',
@@ -9,7 +9,7 @@ import { BucketlistService } from '../../bucketlist.service'
   ]
 })
 export class UserRegistrationComponent implements OnInit {
-  constructor(private bucketlistService: BucketlistService) {
+  constructor(private bucketlistService: BucketlistService, private router: Router) {
     
    }
 
@@ -20,10 +20,16 @@ export class UserRegistrationComponent implements OnInit {
     if (!username) { return; }
     this.bucketlistService.addUser(username, email, password).subscribe(
       // Returns the updated list of all bucketlists
-      
-        
-        ); 
+
+        );
+        // Redirects to Log In page
+        this.router.navigate(['auth/login']);
   }
+
+  logIn(): void {
+    this.router.navigate(['auth/login']);
+  }
+
   ngOnInit() {
     
   }

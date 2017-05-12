@@ -3,7 +3,7 @@
 </head>
 <body>
   <div class="container">
-    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-4">
       <div class="panel panel-info" >
         <div class="panel-heading">
             <div class="panel-title">User Registration</div>
@@ -13,11 +13,12 @@
           <div class="main-login main-center">
             <form>
               <div class="form-group">
-                <label for="name" class="cols-sm-2 control-label">Username:</label>
-                <div class="cols-sm-10">
+                <label for="name" class="cols-sm-4 control-label">Username:</label>
+                <div class="cols-sm-12">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input #userName />
+                    <input type="text" class="form-control" #userName required="required" />
+              
                   </div>
                 </div>
               </div>
@@ -27,7 +28,8 @@
                 <div class="cols-sm-10">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                    <input #email />
+                    <input type="text" class="form-control" #email required />
+              
                   </div>
                 </div>
               </div>
@@ -37,18 +39,21 @@
                 <div class="cols-sm-10">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input #password />
+                    <input type="password" class="form-control" #password required />
+            
                   </div>
                 </div>
               </div>
-                <!--<label>Email :</label> <input #email />
-                <label>password :</label> <input #password />-->
-              
+                
               <div class="form-group">
                 <button class="btn btn-primary btn-lg login-button"
                 (click)="addUser(userName.value, email.value, password.value);
                 userName.value=''; email.value=''; password.value=''">
-                  Sign In
+                  Register
+                </button>
+                <button class="btn btn-primary btn-lg login-button"
+                (click)="logIn()">
+                  Log In
                 </button>
               </div>
               
@@ -59,3 +64,6 @@
     </div>
   </div>
 </body>
+
+
+

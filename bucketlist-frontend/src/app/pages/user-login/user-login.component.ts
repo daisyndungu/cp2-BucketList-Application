@@ -6,7 +6,8 @@ import { BucketlistService } from '../../bucketlist.service'
 @Component({
   selector: 'app-user-login',
   templateUrl: './user-login.component.html',
-  styleUrls: ['./user-login.component.css']
+  styleUrls: ['../../../assets/bootstrap/css/bootstrap-theme.min.css', 
+  "../../../assets/bootstrap/css/bootstrap.css"]
 })
 export class UserLoginComponent implements OnInit {
   loading = false;
@@ -30,6 +31,11 @@ userLogin(username: string, password: string): any {
         
         ); 
   }
+
+  register(): void {
+    this.router.navigate(['auth/register']);
+  }
+
   ngOnInit() {
   }
 

@@ -1,11 +1,57 @@
-<p>
-  user-login works!
-</p>
-<div>
-  <label>Username:</label> <input #userName />
-  <label>password :</label> <input #password />
-  <button (click)="userLogin(userName.value, password.value);
-  userName.value=''; password.value=''">
-    Log In
-  </button>
-</div>
+<head>
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="container">
+    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-4">
+      <div class="panel panel-info" >
+        <div class="panel-heading">
+            <div class="panel-title">Log In</div>
+        </div>   
+
+        <div style="padding-top:30px" class="panel-body" >
+          <div class="main-login main-center">
+            <form>
+              <div class="form-group">
+                <label for="name" class="cols-sm-4 control-label">Username:</label>
+                <div class="cols-sm-12">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input type="text" class="form-control" #userName required="required" />
+              
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="name" class="cols-sm-2 control-label">password:</label>
+                <div class="cols-sm-10">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" class="form-control" #password required />
+            
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <button class="btn btn-primary btn-lg login-button" (click)="userLogin(userName.value, password.value);
+                userName.value=''; password.value=''">
+                  Log In
+                </button>
+                <button class="btn btn-primary btn-lg login-button"
+                (click)="register()">
+                  Register
+                </button>
+              </div>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+
+

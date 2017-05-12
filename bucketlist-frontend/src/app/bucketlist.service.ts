@@ -111,10 +111,10 @@ export class BucketlistService {
                .map(response => response.json());
   }
 
-  addItem(name: string, description: string, status: string, bucketlist_id: number): Observable<any[]> {
+  addItem(name: string, description: string, bucketlist_id: number): Observable<any[]> {
     const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/`;
     return this.http
-               .post(url, JSON.stringify({'name': name, 'description': description, 'status': status}), {headers: this.authHeader})
+               .post(url, JSON.stringify({'name': name, 'description': description}), {headers: this.authHeader})
                .map(response => response.json());
   }
 
