@@ -15,6 +15,8 @@ export class ItemComponent implements OnInit {
   id: number;
   item_id: number;
   item: any;
+  errorMessage = '';
+  successMessage = '';
   constructor(route: ActivatedRoute, private bucketlistService: BucketlistService,
     private router: Router) {
       this.id = route.snapshot.params['id'],
@@ -41,7 +43,23 @@ export class ItemComponent implements OnInit {
 
   save(name: any, description: any, status: any, bucketlist_id: number,  item_id: number): void {
     this.bucketlistService.updateItem(name, description, status, this.id, this.item_id).subscribe(
-      () =>  this.getItem(this.id, this.item_id));
+      
+      result => {
+                
+                    // Deleted successful
+                    this.successMessage = ("Item eddited successfully.");
+                    setTimeout( () =>  this.getItem(this.id, this.item_id), 3);
+                    
+                      
+      },
+      error => {
+                
+              // Deleted successful
+              this.errorMessage = ("Item already exists");
+              setTimeout( () =>  this.getItem(this.id, this.item_id), 3);
+                       
+      }
+      );
     
   }
 
