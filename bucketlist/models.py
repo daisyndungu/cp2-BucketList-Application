@@ -87,7 +87,7 @@ class BucketListItem(db.Model, AddUpdateDelete):
                                                 ondelete="CASCADE"),
                               nullable=False)
 
-    def __init__(self, name, description, status, bucketlist_id):
+    def __init__(self, name, description, bucketlist_id,  status=False):
         self.name = name
         self.description = description
         self.status = status
