@@ -78,6 +78,11 @@ export class ItemsComponent implements OnInit {
     this.router.navigate(['bucketlists']);
   }
 
+  logout(): void {
+    this.bucketlistService.logout()
+    this.router.navigate(['auth/login']);
+  }
+
   ngOnInit() {
     this.getItems(this.bucketlist_id);
     console.log(this.bucketlist_id)

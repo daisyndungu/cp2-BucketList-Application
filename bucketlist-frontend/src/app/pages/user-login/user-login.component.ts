@@ -22,7 +22,7 @@ userLogin(username: string, password: string): any {
     if (!password) { return; }
     this.bucketlistService.userLogin(username, password).subscribe(
       result => {
-          setTimeout(() => { this.router.navigate(['bucketlists']); }, 3000);
+          setTimeout(() => { this.router.navigate(['bucketlists']); }, 3);
         
          },
          error => {

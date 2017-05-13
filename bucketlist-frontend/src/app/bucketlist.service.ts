@@ -57,6 +57,11 @@ export class BucketlistService {
 
   }
 
+  logout() {
+        // remove token from local storage to log user out
+        localStorage.removeItem('currentUser');
+    }
+
   getBucketlists(): Observable<any> {
     return this.http
         .get(`${this.baseUrl}/bucketlists/`, {headers: this.authHeader})

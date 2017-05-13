@@ -100,6 +100,11 @@ add(name: string): void {
         this.showButton=true
     }
   
+  logout(): void {
+    this.bucketlistService.logout()
+    this.router.navigate(['auth/login']);
+  }
+  
      
 }
 
