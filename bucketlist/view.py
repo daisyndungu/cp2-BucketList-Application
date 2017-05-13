@@ -53,7 +53,7 @@ class BucketlistView(Resource):
             self.reqparse.add_argument('page', location="args", type=int,
                                        required=False, default=1)
             self.reqparse.add_argument('per_page', location="args", type=int,
-                                       default=3)
+                                       default=20)
             # Set page limit to 20 items per page if the user does not
             # specify a number
             args = self.reqparse.parse_args()
@@ -210,14 +210,9 @@ class BucketListItemView(Resource):
         if not bucketlist_query:
             return "Invalid bucketlist", 400
         request_dict = self.reqparse.parse_args()
-        if request_dict['status']:
-            request_dict['status'] = request_dict['status'].lower()
-        if request_dict['status'] == "true":
-            return {'Error': 'Status can not be true'}, 401
         try:
             item = BucketListItem(name=request_dict['name'],
                                   description=request_dict['description'],
-                                  status=request_dict['status'],
                                   bucketlist_id=bucketlist_id)
             item.add(item)
             return {'Done': 'Bucketlist item saved successfully'}, 201
