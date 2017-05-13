@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router }            from '@angular/router'
+import * as _ from 'underscore';
 
 import { BucketlistService } from '../../bucketlist.service'
 import { BucketlistComponent } from '../bucketlist/bucketlist.component'
@@ -15,6 +16,11 @@ export class BucketlistsComponent implements OnInit {
   pages: any[];
   errorMessage = '';
   successMessage = '';
+  range: any[]=[];
+  per_page: number;
+  next_page: string;
+  prev_page: string;
+  total_pages: number;
   constructor(private bucketlistService: BucketlistService,
     private router: Router) { }
 
@@ -52,7 +58,30 @@ add(name: string): void {
     this.bucketlistService.getBucketlists()
       .subscribe(
         
-        bucketlists => this.bucketlists = bucketlists.bucketlist
+        bucketlists => {this.bucketlists = bucketlists,
+          this.per_page = bucketlists.meta.per_page,
+          this.total_pages = bucketlists.meta.total_pages,
+          this.range = _.range(1, this.total_pages),
+          this.next_page = bucketlists.meta.next_page,
+          this.prev_page = bucketlists.meta.prev_page
+
+        }
+
+      );
+  }
+
+  toPage(page_number, per_page): any {
+    this.bucketlistService.toPage(page_number, per_page)
+      .subscribe(
+        
+        bucketlists => {this.bucketlists = bucketlists,
+          this.per_page = bucketlists.meta.per_page,
+          this.total_pages = bucketlists.meta.total_pages,
+          this.range = _.range(1, this.total_pages),
+          this.next_page = bucketlists.meta.next_page,
+          this.prev_page = bucketlists.meta.prev_page
+
+        }
 
       );
   }
@@ -82,6 +111,23 @@ add(name: string): void {
     
     this.router.navigate(['bucketlists/' + id]);
   }
+
+  nextPreviousPage(page_url): any {
+    this.bucketlistService.nextPreviousPage(page_url)
+      .subscribe(
+        
+        bucketlists => {this.bucketlists = bucketlists,
+          this.per_page = bucketlists.meta.per_page,
+          this.total_pages = bucketlists.meta.total_pages,
+          this.range = _.range(1, this.total_pages),
+          this.next_page = bucketlists.meta.next_page,
+          this.prev_page = bucketlists.meta.previous_page
+
+        }
+
+      );
+  }
+
 
   goBack(): void {
     this.getBucketlists();

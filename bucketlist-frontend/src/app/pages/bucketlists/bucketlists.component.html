@@ -35,22 +35,22 @@
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span></button>
   {{ successMessage }}
-</div>
-<div *ngIf="errorMessage" class="alert alert-danger alert-dismissible" role="alert"> 
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span></button>
-  {{ errorMessage }}
-</div>
-<div *ngIf=showButton class="alert alert-info alert-dismissible" role="alert"> 
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span></button>
-  Search Results
-</div>
-<button *ngIf=showButton (click)="goBack()">Back</button>
-<p *ngIf="bucketlists.length==0"><strong> No Bucketlist found...</strong></p>
-<div class="bucketlists"  *ngFor="let bucketlist of bucketlists">
-<div class="col-md-4">
-    <button class="items"
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible" role="alert"> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span></button>
+    {{ errorMessage }}
+  </div>
+  <div *ngIf=showButton class="alert alert-info alert-dismissible" role="alert"> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span></button>
+    Search Results
+  </div>
+  <button *ngIf=showButton (click)="goBack()">Back</button>
+  <p *ngIf="bucketlists.length==0"><strong> No Bucketlist found...</strong></p>
+  <div class="bucketlists"  *ngFor="let bucketlist of bucketlists.bucketlist">
+  <div class="col-md-4">
+      <button class="items"
               (click)="items(bucketlist.bucketlist_id); $event.stopPropagation()">
     <figure class="icon navy col-md-4">
       <img src="../../assets/images/29962-200.png" alt="sq-sample33" />
@@ -69,4 +69,16 @@
 </div>
 </div>
 </body>
+<nav aria-label="Page navigation example">
+  <div class="row col-lg-12 ">
+    <ul class="pager">
+      <ul class="pagination pagination-lg" *ngIf="range">
+        <li *ngIf="prev_page" class="previous"><a (click)="nextPreviousPage(prev_page); $event.stopPropagation()" >Previous</a></li>
+        <li *ngFor="let number of range"><a  (click)="toPage(number, per_page); $event.stopPropagation()" >{{ number }}</a></li>
+        <li *ngIf="next_page" ><a (click)="toPage(total_pages, per_page); $event.stopPropagation()">{{ total_pages }}</a></li>
+        <li *ngIf=next_page class="next_page"><a (click)="nextPreviousPage(next_page); $event.stopPropagation()" >Next</a></li>
+      </ul>
+    </ul>
+  </div>
+</nav>
 <footer></footer>

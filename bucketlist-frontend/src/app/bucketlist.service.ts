@@ -111,6 +111,21 @@ export class BucketlistService {
                .get(url, {headers: this.authHeader})
                .map(response => response.json());
   }
+  
+  toPage(page_number: number, per_page: number): Observable<any> {
+    const url = `${this.baseUrl}` + `/bucketlists/` + `?page=${page_number}&per_page=${per_page}`;
+    return this.http
+               .get(url, {headers: this.authHeader})
+               .map(response => response.json());
+  }
+
+  nextPreviousPage(page_url: string): Observable<any> {
+    const url = `${this.baseUrl}` + page_url;
+    return this.http
+               .get(url, {headers: this.authHeader})
+               .map(response => response.json());
+  }
+
   // Add a bucketlist
   add(name: string): Observable<any> {
     const url = `${this.baseUrl}` + `/bucketlists/`;
