@@ -8,8 +8,7 @@ import { BucketlistService } from '../../bucketlist.service'
 
 @Component({
   selector: 'app-bucketlist',
-  templateUrl: './bucketlist.component.html',
-  styleUrls: ['./bucketlist.component.css']
+  templateUrl: './bucketlist.component.html'
 })
 export class BucketlistComponent implements OnInit {
   bucketlist: number;

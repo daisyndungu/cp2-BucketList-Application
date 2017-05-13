@@ -7,8 +7,7 @@ import { BucketlistService } from '../../bucketlist.service'
 
 @Component({
   selector: 'item',
-  templateUrl: './item.component.html',
-  styleUrls: ['./item.component.css']
+  templateUrl: './item.component.html'
 })
 export class ItemComponent implements OnInit {
 
