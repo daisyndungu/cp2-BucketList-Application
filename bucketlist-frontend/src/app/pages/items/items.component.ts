@@ -12,6 +12,8 @@ import { BucketlistService } from '../../bucketlist.service'
 export class ItemsComponent implements OnInit {
   items: any[] = [];
   bucketlist_id: number;
+  errorMessage = '';
+  successMessage = '';
   constructor(route: ActivatedRoute, private bucketlistService: BucketlistService,
   private router: Router) { 
     this.bucketlist_id = route.snapshot.params['id']
@@ -29,16 +31,41 @@ export class ItemsComponent implements OnInit {
     if (!name) { return; }
     this.bucketlistService.addItem(name, description, this.bucketlist_id).subscribe(
       // Returns the updated list of all bucketlists
-      
-        () => this.getItems(this.bucketlist_id)
+        result => {
+                
+                    // Deleted successful
+                    this.successMessage = ("Item added succesfully");
+                    setTimeout( () => this.getItems(this.bucketlist_id), 3);
+                    
+                      
+      },
+      error => {
+                
+              // Deleted successful
+              this.errorMessage = ("Item already exists");
+              setTimeout( () => this.getItems(this.bucketlist_id), 30);
+                    
+                       
+      }
+        
         ); 
   }
 
-  delete(item_id, bucketlist_id): void {
+  delete(item_id, bucketlist_id): any {
     // Delete a bucketlist by its ID
     this.bucketlistService.deleteItem(item_id, this.bucketlist_id).subscribe(
       // Returns the updated list of all bucketlists
-        () => this.getItems(this.bucketlist_id));
+        result => {
+                if (result) {
+                    // Deleted successful
+                    this.errorMessage = ("Item deleted");
+                    setTimeout( () => this.getItems(this.bucketlist_id), 30);
+                    
+                }
+                
+      }
+        );
+        
 
     }
 

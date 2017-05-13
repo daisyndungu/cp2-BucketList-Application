@@ -13,7 +13,8 @@ export class BucketlistsComponent implements OnInit {
   bucketlists: any[] = [];
   showButton=false;
   pages: any[];
-  message = '';
+  errorMessage = '';
+  successMessage = '';
   constructor(private bucketlistService: BucketlistService,
     private router: Router) { }
 
@@ -27,7 +28,23 @@ add(name: string): void {
     if (!name) { return; }
     this.bucketlistService.add(name).subscribe(
       // Returns the updated list of all bucketlists
-        () => this.getBucketlists());
+        result => {
+                
+                    // Deleted successful
+                    this.successMessage = ("Bucketlist added succesfully");
+                    setTimeout( () => this.getBucketlists(), 3);
+                    
+                      
+      },
+      error => {
+                
+              // Deleted successful
+              this.errorMessage = ("Bucketlist already exists");
+              setTimeout( () => this.getBucketlists(), 30);
+                    
+                       
+      }
+      );
   }
 
 //  Get All bucketlists
@@ -50,12 +67,9 @@ add(name: string): void {
       // Returns the updated list of all bucketlists
       result => {
                 if (result) {
-                    // login successful
-                    this.message = ("Bucketlist deleted succesfully");
-                    () => this.getBucketlists();
-                } else {
-                    // login failed
-                     this.message = ("Invalid Username or password");
+                    // Deleted successful
+                    this.errorMessage = ("Bucketlist deleted");
+                    setTimeout( () => this.getBucketlists(), 30);
                     
                 }
                 
@@ -78,7 +92,9 @@ add(name: string): void {
     name = name.trim();
     if (!name) { return; }
       this.bucketlistService.search(name).subscribe(
+
         bucketlists => this.bucketlists = bucketlists
+        
         
         );
         this.showButton=true

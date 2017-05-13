@@ -22,10 +22,12 @@ userLogin(username: string, password: string): any {
     if (!password) { return; }
     this.bucketlistService.userLogin(username, password).subscribe(
       result => {
-        this.router.navigate(['bucketlists']);
+          setTimeout(() => { this.router.navigate(['bucketlists']); }, 3000);
+        
          },
          error => {
-        this.error = ("Invalid Username or password");
+              this.error = ("Invalid Username or password");
+              this.loading = false;
          }
          
         

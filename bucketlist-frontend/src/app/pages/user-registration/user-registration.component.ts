@@ -9,6 +9,9 @@ import { BucketlistService } from '../../bucketlist.service'
   ]
 })
 export class UserRegistrationComponent implements OnInit {
+  loading = false;
+  error = '';
+  message = '';
   constructor(private bucketlistService: BucketlistService, private router: Router) {
     
    }
@@ -20,10 +23,18 @@ export class UserRegistrationComponent implements OnInit {
     if (!username) { return; }
     this.bucketlistService.addUser(username, email, password).subscribe(
       // Returns the updated list of all bucketlists
-
+        result => {
+          // Redirects to Log In page
+          this.message = ("Registered successfully...");
+          setTimeout(() => { this.router.navigate(['auth/login']); }, 300);
+        
+         },
+         error => {
+              this.error = ("Registration Failed. Please try again");
+              this.loading = false;
+         }
         );
-        // Redirects to Log In page
-        this.router.navigate(['auth/login']);
+        
   }
 
   logIn(): void {
