@@ -66,6 +66,6 @@ class UserLogin(Resource):
                 response = make_response(jsonify({'Token': auth_token}), 201)
                 return response
             else:
-                return{'Error': 'Wrong user name or password'}
+                return{'Error': 'Wrong user name or password'}, 400
         except Exception as e:
                 return {"Error": str(e)}, 400
