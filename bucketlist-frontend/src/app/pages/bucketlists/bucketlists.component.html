@@ -21,9 +21,13 @@
 </div>
 <br>
 <body>
-  
+<div *ngIf="message" class="alert alert-info alert-dismissible" role="alert"> 
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span></button>
+  {{ message }}
+</div>
 <button *ngIf=showButton (click)="goBack()">Back</button>
-
+<p *ngIf="bucketlists.length==0"><strong> You don't have any bucketlists at the moment...</strong></p>
 <div class="bucketlists"  *ngFor="let bucketlist of bucketlists">
 <div class="col-md-4">
     <button class="items"

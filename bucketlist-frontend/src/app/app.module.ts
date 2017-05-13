@@ -11,14 +11,15 @@ import { ItemsComponent } from './pages/items/items.component'
 import { UserLoginComponent } from './pages/user-login/user-login.component'
 import { BucketlistComponent } from './pages/bucketlist/bucketlist.component'
 import { BucketlistsComponent } from './pages/bucketlists/bucketlists.component'
-import { UserRegistrationComponent } from './pages/user-registration/user-registration.component'
+import { UserRegistrationComponent } from './pages/user-registration/user-registration.component';
+import { AuthGuard } from './pages/authguard/authguard.service'
 
 const appRoutes: Routes = [
-  { path: '', redirectTo:'/bucketlists', pathMatch: 'full' },
-  { path: 'bucketlists', component: BucketlistsComponent },
-  { path: 'bucketlists/:id', component: BucketlistComponent },
-  { path: 'bucketlists/:id/items', component: ItemsComponent },
-  { path: 'bucketlists/:id/items/:item_id', component: ItemComponent },
+  { path: '', redirectTo:'/bucketlists', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: 'bucketlists', component: BucketlistsComponent, canActivate: [AuthGuard] },
+  { path: 'bucketlists/:id', component: BucketlistComponent, canActivate: [AuthGuard] },
+  { path: 'bucketlists/:id/items', component: ItemsComponent, canActivate: [AuthGuard] },
+  { path: 'bucketlists/:id/items/:item_id', component: ItemComponent, canActivate: [AuthGuard] },
   { path: 'auth/register', component: UserRegistrationComponent },
   { path: 'auth/login', component: UserLoginComponent }
   
@@ -40,7 +41,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpModule
   ],
-  providers: [BucketlistService],
+  providers: [BucketlistService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

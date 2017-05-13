@@ -9,11 +9,11 @@ import { BucketlistComponent } from '../bucketlist/bucketlist.component'
   templateUrl: './bucketlists.component.html',
   styleUrls: ['./bucketlists.component.css']
 })
-// ../../../assets/bootstrap/css/bootstrap-theme.min.css
 export class BucketlistsComponent implements OnInit {
   bucketlists: any[] = [];
   showButton=false;
   pages: any[];
+  message = '';
   constructor(private bucketlistService: BucketlistService,
     private router: Router) { }
 
@@ -34,20 +34,33 @@ add(name: string): void {
   getBucketlists(): any {
     this.bucketlistService.getBucketlists()
       .subscribe(
-        bucketlists => this.bucketlists = bucketlists.bucketlist
         
-      )
+        bucketlists => this.bucketlists = bucketlists.bucketlist
+
+      );
   }
   
   items(id): void {
     this.router.navigate(['bucketlists/' + id + '/items']);
   }
 
-  delete(bucketlist): void {
+  delete(bucketlist): any {
     // Delete a bucketlist by its ID
     this.bucketlistService.delete(bucketlist.bucketlist_id).subscribe(
       // Returns the updated list of all bucketlists
-        () => this.getBucketlists());
+      result => {
+                if (result) {
+                    // login successful
+                    this.message = ("Bucketlist deleted succesfully");
+                    () => this.getBucketlists();
+                } else {
+                    // login failed
+                     this.message = ("Invalid Username or password");
+                    
+                }
+                
+      });
+        
 
     }
 

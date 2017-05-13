@@ -3,6 +3,7 @@ import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class BucketlistService {
@@ -20,7 +21,9 @@ export class BucketlistService {
   // private authHeader = this.headers.append({"Authorization": this.authToken})
 
   private baseUrl = 'http://127.0.0.1:5000';  // URL to web api
-  public token: string;
+  // public token: string;
+  token = localStorage.getItem('currentUser');
+  // this.token = currentUser.token;
   
   constructor(private http: Http) { 
   }
@@ -40,7 +43,7 @@ export class BucketlistService {
                if (token) {
                  this.token = token;
 
-                 // store username and jwt token in local storage to keep user logged in between page refreshes
+                 // store jwt token in local storage to keep user logged in between page refreshes
                  localStorage.setItem('currentUser', this.token);
 
                  return true
@@ -135,11 +138,10 @@ export class BucketlistService {
     
 
   }
-  
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
-  }
+ 
+  private handleError(error: Response) {
+        return Observable.throw(error.json().error || 'Server error'); 
+         }
 }
 
  

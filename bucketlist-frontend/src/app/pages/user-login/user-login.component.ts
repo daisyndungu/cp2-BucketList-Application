@@ -15,23 +15,19 @@ export class UserLoginComponent implements OnInit {
   constructor(private bucketlistService: BucketlistService,
   private router: Router) { }
 userLogin(username: string, password: string): any {
+    this.loading = true;
     username = username.trim();
     password = password.trim();
     if (!username) { return; }
     if (!password) { return; }
     this.bucketlistService.userLogin(username, password).subscribe(
       result => {
-                if (result === true) {
-                    // login successful
-                    this.router.navigate(['bucketlists']);
-                    this.router.navigate(['bucketlists']);
-                } else {
-                    // login failed
-                     this.error = ("Invalid Username or password");
-                }
-                
-      }
-      
+        this.router.navigate(['bucketlists']);
+         },
+         error => {
+        this.error = ("Invalid Username or password");
+         }
+         
         
         ); 
   }
