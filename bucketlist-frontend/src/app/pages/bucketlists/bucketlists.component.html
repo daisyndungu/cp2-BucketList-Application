@@ -5,7 +5,6 @@
       <h2>
         <button type="button" class="btn btn-primary" (click)="logout()" style="float:right;" data-dismiss="alert">
           <span aria-hidden="true">&times;</span> Log Out</button>
-        
       </h2>
     </div>
   </div>
@@ -73,10 +72,10 @@
   <div class="row col-lg-12 ">
     <ul class="pager">
       <ul class="pagination pagination-lg" *ngIf="range">
-        <li *ngIf="prev_page" class="previous"><a (click)="nextPreviousPage(prev_page); $event.stopPropagation()" >Previous</a></li>
+        <li *ngIf="prev_page!='Null'" class="previous"><a (click)="nextPreviousPage(prev_page); $event.stopPropagation()" >Previous</a></li>
         <li *ngFor="let number of range"><a  (click)="toPage(number, per_page); $event.stopPropagation()" >{{ number }}</a></li>
-        <li *ngIf="next_page" ><a (click)="toPage(total_pages, per_page); $event.stopPropagation()">{{ total_pages }}</a></li>
-        <li *ngIf=next_page class="next_page"><a (click)="nextPreviousPage(next_page); $event.stopPropagation()" >Next</a></li>
+        <li *ngIf="total_pages>1" ><a (click)="toPage(total_pages, per_page); $event.stopPropagation()">{{ total_pages }}</a></li>
+        <li *ngIf="next_page!='Null'" class="next_page"><a (click)="nextPreviousPage(next_page); $event.stopPropagation()" >Next</a></li>
       </ul>
     </ul>
   </div>

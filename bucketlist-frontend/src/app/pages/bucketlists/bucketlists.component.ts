@@ -63,7 +63,7 @@ add(name: string): void {
           this.total_pages = bucketlists.meta.total_pages,
           this.range = _.range(1, this.total_pages),
           this.next_page = bucketlists.meta.next_page,
-          this.prev_page = bucketlists.meta.prev_page
+          this.prev_page = bucketlists.meta.previous_page
 
         }
 
@@ -79,7 +79,7 @@ add(name: string): void {
           this.total_pages = bucketlists.meta.total_pages,
           this.range = _.range(1, this.total_pages),
           this.next_page = bucketlists.meta.next_page,
-          this.prev_page = bucketlists.meta.prev_page
+          this.prev_page = bucketlists.meta.previous_page
 
         }
 
@@ -139,8 +139,14 @@ add(name: string): void {
     if (!name) { return; }
       this.bucketlistService.search(name).subscribe(
 
-        bucketlists => this.bucketlists = bucketlists
-        
+        bucketlists => {this.bucketlists = bucketlists,
+          this.per_page = bucketlists.meta.per_page,
+          this.total_pages = bucketlists.meta.total_pages,
+          this.range = _.range(1, this.total_pages),
+          this.next_page = bucketlists.meta.next_page,
+          this.prev_page = bucketlists.meta.previous_page
+
+        }
         
         );
         this.showButton=true
