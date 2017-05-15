@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core'
-import { Router }            from '@angular/router'
+import { Component, OnInit } from '@angular/core';
+import { Router }            from '@angular/router';
 import { BucketlistService } from '../../bucketlist.service'
 @Component({
   selector: 'app-user-registration',
