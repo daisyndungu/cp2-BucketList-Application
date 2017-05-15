@@ -48,14 +48,8 @@ export class BucketlistService {
 
                  // store jwt token in local storage to keep user logged in between page refreshes
                  localStorage.setItem('currentUser', this.token);
-
-                 return true
-          
-
-               } else {
-                 return false;
                }
-
+                
                })
 
   }

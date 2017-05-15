@@ -53,7 +53,7 @@ class BucketlistView(Resource):
             self.reqparse.add_argument('page', location="args", type=int,
                                        required=False, default=1)
             self.reqparse.add_argument('per_page', location="args", type=int,
-                                       default=20)
+                                       default=2)
             # Set page limit to 20 items per page if the user does not
             # specify a number
             args = self.reqparse.parse_args()

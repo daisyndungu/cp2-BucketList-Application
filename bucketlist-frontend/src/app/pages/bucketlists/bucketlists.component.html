@@ -13,10 +13,10 @@
 <div class="row">
   <div class="col-lg-6">
     <div class="input-group">
+      <input #bucketlistName type="text" class="form-control" placeholder="New bucketlist...">
       <span class="input-group-btn">
         <button class="btn btn-default" (click)="add(bucketlistName.value); bucketlistName.value=''" type="button">Add</button>
       </span>
-      <input #bucketlistName type="text" class="form-control" placeholder="New bucketlist...">
     </div>
   </div>
   <div class="col-lg-6">
@@ -56,7 +56,8 @@
       <figcaption>
         <h2>{{ bucketlist.name }}</h2>
         <p>
-          {{ bucketlist.date_created }}
+          Created On:
+          {{ bucketlist.date_created | date: 'dd/MM/yyyy'}}
         </p>
         <button class="glyphicon glyphicon-pencil"
               (click)="edit(bucketlist.bucketlist_id); $event.stopPropagation()"></button>

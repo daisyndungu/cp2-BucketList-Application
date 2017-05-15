@@ -31,7 +31,10 @@
     <strong>There are no Items at the moment</strong>
   </div>
   <button type="button" class="btn btn-primary" (click)="goBack()">Back</button>
+  <span class="glyphicon glyphicon-ok">Done</span>&nbsp;&nbsp;&nbsp;
+  <span class="glyphicon glyphicon-refresh">Not Done</span>
   <div class="container">
+    
       <!-- Top Navigation -->
     <div class="col-md-4" *ngFor="let item of items">
     <button class="item" (click)="edit(item.item_id); $event.stopPropagation()">

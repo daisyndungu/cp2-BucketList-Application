@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
+import { Router } from '@angular/router';
 import { BucketlistService } from '../../bucketlist.service'
 @Component({
   selector: 'app-user-registration',
@@ -9,7 +9,6 @@ import { BucketlistService } from '../../bucketlist.service'
   ]
 })
 export class UserRegistrationComponent implements OnInit {
-  loading = false;
   error = '';
   message = '';
   constructor(private bucketlistService: BucketlistService, private router: Router) {
@@ -24,14 +23,13 @@ export class UserRegistrationComponent implements OnInit {
     this.bucketlistService.addUser(username, email, password).subscribe(
         result => {
           // Redirects to Log In page
-          this.message = ("Registered successfully...");
-          setTimeout(() => { this.router.navigate(['auth/login']); }, 300);
+          this.message = ("Registered successfully. Redirecting to login...");
+          setTimeout(() => { this.router.navigate(['auth/login']); }, 600);
         
          },
          error => {
           //  Return an alert if registration was unsuccessful
               this.error = ("Registration Failed. Please try again");
-              this.loading = false;
          }
         );
         

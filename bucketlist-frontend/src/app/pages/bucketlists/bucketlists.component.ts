@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
+import { Router } from '@angular/router';
 import * as _ from 'underscore';
 import { BucketlistService } from '../../bucketlist.service';
 import { BucketlistComponent } from '../bucketlist/bucketlist.component'

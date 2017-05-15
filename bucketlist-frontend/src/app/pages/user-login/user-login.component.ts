@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
-
+import { Router } from '@angular/router';
 import { BucketlistService } from '../../bucketlist.service'
 
 @Component({
@@ -12,6 +11,7 @@ import { BucketlistService } from '../../bucketlist.service'
 export class UserLoginComponent implements OnInit {
   loading = false;
   error = '';
+  message= '';
   constructor(private bucketlistService: BucketlistService,
   private router: Router) { }
 userLogin(username: string, password: string): any {
@@ -22,7 +22,8 @@ userLogin(username: string, password: string): any {
     if (!password) { return; }
     this.bucketlistService.userLogin(username, password).subscribe(
       result => {
-          setTimeout(() => { this.router.navigate(['bucketlists']); }, 3);
+          this.message = ("Succesful Log In. Loading bucketlists...");
+          setTimeout(() => { this.router.navigate(['bucketlists']); }, 500);
         
          },
          error => {
