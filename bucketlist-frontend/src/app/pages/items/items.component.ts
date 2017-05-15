@@ -30,10 +30,10 @@ export class ItemsComponent implements OnInit {
     description = description.trim();
     if (!name) { return; }
     this.bucketlistService.addItem(name, description, this.bucketlist_id).subscribe(
-      // Returns the updated list of all bucketlists
+    
         result => {
                 
-                    // Deleted successful
+                    // Create item successful
                     this.successMessage = ("Item added succesfully");
                     setTimeout( () => this.getItems(this.bucketlist_id), 3);
                     

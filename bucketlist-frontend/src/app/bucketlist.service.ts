@@ -1,5 +1,5 @@
-import { Injectable }    from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
+import { Injectable }    from '@angular/core'
+import { Headers, Http, Response } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -11,6 +11,7 @@ export class BucketlistService {
     {
       "Content-Type": "application/json"
     });
+  // Create headers for all endpoints that require authorization
   private authHeader = new Headers(
     {
       "Access-Control-Allow-Origin": '*',
@@ -18,23 +19,25 @@ export class BucketlistService {
        "Authorization": localStorage.getItem('currentUser')
     }
   )
-  // private authHeader = this.headers.append({"Authorization": this.authToken})
 
   private baseUrl = 'http://127.0.0.1:5000';  // URL to web api
-  // public token: string;
+  // Get token if already exists
   token = localStorage.getItem('currentUser');
-  // this.token = currentUser.token;
   
   constructor(private http: Http) { 
   }
+  // Add new user
   addUser(username: string, email: string, password: string): Observable<any> {
     const url = `${this.baseUrl}` + `/auth/register`;
     return this.http
                .post(url, JSON.stringify({'username': username, 'email': email, 'password': password}), {headers: this.headers})
                .map(response => response.json());
   }
-
+  
   userLogin(username: string, password: string): Observable<any> {
+    /**
+     * Login a registered user and saves the generated token in the local memory
+     */
     const url = `${this.baseUrl}` + `/auth/login`;
     return this.http
                .post(url, JSON.stringify({'username': username, 'password': password}), {headers: this.headers})
@@ -63,6 +66,9 @@ export class BucketlistService {
     }
 
   getBucketlists(): Observable<any> {
+    /**
+     * Fetch all bucketlists that belongs to the logged in user
+     */
     return this.http
         .get(`${this.baseUrl}/bucketlists/`, {headers: this.authHeader})
         .map(response => response.json())
@@ -70,7 +76,9 @@ export class BucketlistService {
   }
 
   getBucketlist(bucketlist_id: number): Observable<any> {
-    
+    /**
+     * Fetch one bucketlist that belongs to the logged in user
+     */
     return this.http
         .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`, {headers: this.authHeader})
         .map(response => response.json())
@@ -78,7 +86,9 @@ export class BucketlistService {
   }
 
   getItems(bucketlist_id: number): Observable<any> {
-    
+     /**
+     * Fetch all items related to the specified bucketlist id
+     */
     return this.http
         .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/`, {headers: this.authHeader})
         .map(response => response.json())
@@ -86,7 +96,9 @@ export class BucketlistService {
   }
 
   getItem(bucketlist_id: number, item_id: number): Observable<any> {
-    
+    /**
+     * Fetch one item related to the specified bucketlist id
+     */
     return this.http
         .get(`${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`  +  `/items/` + `${item_id}`, {headers: this.authHeader})
         .map(response => response.json())
@@ -94,18 +106,27 @@ export class BucketlistService {
   }
 
   delete(id: number): Observable<void> {
+    /**
+     * Delete a specified bucketlist
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `${id}`;
     return this.http.delete(url, {headers: this.authHeader})
       .catch(this.handleError);
   }
 
   update(name: any, bucketlist_id: number): Observable<any> {
+    /**
+     * Edit a specified bucketlist
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}`;
     return this.http.put(url, JSON.stringify({'name': name}), {headers: this.authHeader})
       .catch(this.handleError);
   }
 
   search(term: string): Observable<any> {
+    /**
+     * Search for bucketlists 
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `?q=${term}`;
     return this.http
                .get(url, {headers: this.authHeader})
@@ -113,6 +134,9 @@ export class BucketlistService {
   }
   
   toPage(page_number: number, per_page: number): Observable<any> {
+    /**
+     * Redirects to the page number selected when viewing all bucketlists
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `?page=${page_number}&per_page=${per_page}`;
     return this.http
                .get(url, {headers: this.authHeader})
@@ -120,14 +144,19 @@ export class BucketlistService {
   }
 
   nextPreviousPage(page_url: string): Observable<any> {
+    /**
+     * Redirects to the next or previous page when viewing all bucketlists
+     */
     const url = `${this.baseUrl}` + page_url;
     return this.http
                .get(url, {headers: this.authHeader})
                .map(response => response.json());
   }
 
-  // Add a bucketlist
   add(name: string): Observable<any> {
+    /**
+     * Add a bucketlist
+     */
     const url = `${this.baseUrl}` + `/bucketlists/`;
     return this.http
                .post(url, JSON.stringify({'name': name}), {headers: this.authHeader})
@@ -135,6 +164,9 @@ export class BucketlistService {
   }
 
   addItem(name: string, description: string, bucketlist_id: number): Observable<any[]> {
+    /**
+     * Add a bucketlist item
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/`;
     return this.http
                .post(url, JSON.stringify({'name': name, 'description': description}), {headers: this.authHeader})
@@ -142,12 +174,18 @@ export class BucketlistService {
   }
 
   deleteItem(item_id: number, bucketlist_id: number): Observable<any[]> {
+    /**
+     * Add a bucketlist item
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/` + `${item_id}`;
     return this.http.delete(url, {headers: this.authHeader})
       .catch(this.handleError);
   }
 
   updateItem(name: any, description: any, status: any, bucketlist_id: number, item_id: number): Observable<any> {
+    /**
+     * Edit a bucketlist item
+     */
     const url = `${this.baseUrl}` + `/bucketlists/` + `${bucketlist_id}` + `/items/` + `${item_id}`;
     return this.http.put(url, JSON.stringify({'name': name, 'description': description, 'status': status}),
     {headers: this.authHeader})

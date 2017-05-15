@@ -22,7 +22,6 @@ export class UserRegistrationComponent implements OnInit {
     password = password.trim();
     if (!username) { return; }
     this.bucketlistService.addUser(username, email, password).subscribe(
-      // Returns the updated list of all bucketlists
         result => {
           // Redirects to Log In page
           this.message = ("Registered successfully...");
@@ -30,6 +29,7 @@ export class UserRegistrationComponent implements OnInit {
         
          },
          error => {
+          //  Return an alert if registration was unsuccessful
               this.error = ("Registration Failed. Please try again");
               this.loading = false;
          }
@@ -38,6 +38,7 @@ export class UserRegistrationComponent implements OnInit {
   }
 
   logIn(): void {
+    // Login Url
     this.router.navigate(['auth/login']);
   }
 
