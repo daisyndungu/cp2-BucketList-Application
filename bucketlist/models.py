@@ -2,7 +2,8 @@ import datetime
 
 from flask_jwt import jwt
 
-from bucketlist import db, app
+from bucketlist import db
+from flask import current_app
 
 
 class AddUpdateDelete():
@@ -40,7 +41,7 @@ class User(db.Model, AddUpdateDelete):
             }
             return jwt.encode(
                 payload,
-                app.config.get('SECRET_KEY'),
+                current_app.config.get('SECRET_KEY'),
                 algorithm='HS256'
             )
         except Exception as e:

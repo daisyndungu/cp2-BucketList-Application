@@ -1,6 +1,8 @@
-from bucketlist import api
+from flask_restful import Api
 from bucketlist.user import UserRegistration, UserLogin
 from bucketlist.view import BucketlistView, BucketListItemView
+
+api = Api()
 
 api.add_resource(BucketlistView, '/bucketlists/', endpoint='add_bucketlist')
 api.add_resource(BucketlistView, '/bucketlists/<int:bucketlist_id>',

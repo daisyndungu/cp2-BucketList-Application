@@ -3,7 +3,7 @@ from flask_restful import Resource, marshal, fields, reqparse
 from flask import request, jsonify, make_response, g, url_for
 from flask_sqlalchemy import sqlalchemy
 
-from bucketlist import db, app
+from bucketlist import db
 from bucketlist.auth import authorize_token
 
 from bucketlist.models import BucketList, BucketListItem
@@ -101,9 +101,9 @@ class BucketlistView(Resource):
             # If not a search request then gets all bucket lists
             bucketlist = (BucketList.query.filter_by(created_by=user_id)
                           .paginate(page, per_page, False))
-            return paginate(bucketlist, page, per_page)
+            return self.paginate(bucketlist, page, per_page)
 
-    def paginate(data, page, per_page):
+    def paginate(self, data, page, per_page):
         if not data:
             return {'Error': 'There are no datas at the moment'}, 400
 
@@ -257,6 +257,7 @@ class BucketListItemView(Resource):
                 except SQLAlchemyError:
                     return {'Error': 'No changes made. A bucketlist\
                     with that name exists or wrong status included'}, 400
+        return {'Error': 'Bucketlist does not exist.'}, 400
 
     def delete(self, bucketlist_id, item_id):
         """

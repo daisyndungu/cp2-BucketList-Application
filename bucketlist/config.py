@@ -7,12 +7,15 @@ class Config():
     TEST = False
     CSRF_ENABLED = True
     PORT = 5000
-    HOST = "127.0.0.1"
+    HOST = "http://127.0.0.1"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", None) + "/bucketlist"
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'migrations')
     SECRET_KEY = os.getenv("SECRET_KEY")
+
+    def init_app(app):
+        pass
 
 
 class Production(Config):
@@ -30,7 +33,8 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite://"
+    SQLALCHEMY_DATABASE_URI = (os.getenv("DATABASE_URI", None
+                                         ) + "/testbucketlist")
     TESTING = True
     DEBUG = True
 
