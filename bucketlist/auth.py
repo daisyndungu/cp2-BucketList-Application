@@ -1,8 +1,8 @@
 from flask_jwt import jwt
 from functools import wraps
-from flask import request, make_response, jsonify, g
+from flask import request, make_response, jsonify, g, current_app
 
-from bucketlist import app
+# from bucketlist import app
 
 
 def decode_auth_token(auth_token):
@@ -10,7 +10,7 @@ def decode_auth_token(auth_token):
     Decodes the authentication token
     """
     try:
-        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'),
+        payload = jwt.decode(auth_token, current_app.config.get('SECRET_KEY'),
                              algorithms=['HS256'])
         return {'response': payload['sub'], 'status': True}
     except jwt.ExpiredSignatureError:
