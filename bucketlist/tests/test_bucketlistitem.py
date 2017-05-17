@@ -33,7 +33,6 @@ class InitialTests(BaseTest):
         res = self.client.post("/bucketlists/1/items/",
                                data=json.dumps({"name": "Test Item"}),
                                headers=self.headers)
-        # import pdb; pdb.set_trace()
         # Add the same bucketlistitem
         response = self.client.post("/bucketlists/1/items/",
                                     data=json.dumps({"name": "Test Item"}),
