@@ -16,5 +16,5 @@ def create_app(config_name):
     from bucketlist.routes import api
     api.init_app(app)
 
-    # CORS(app)
+    CORS(app)
     return app
