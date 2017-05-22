@@ -1,6 +1,7 @@
 from flask import jsonify, make_response
 from flask_restful import Resource, reqparse
 from sqlalchemy.exc import SQLAlchemyError
+from passlib.hash import pbkdf2_sha256
 
 from bucketlist.models import User, db
 
@@ -25,9 +26,11 @@ class UserRegistration(Resource):
         """
         user_details = self.reqparse.parse_args()
         try:
+            hash_password = pbkdf2_sha256.encrypt(user_details['password'],
+                                                  rounds=200000, salt_size=16)
             user = User(username=user_details['username'],
                         email=user_details['email'],
-                        password=user_details['password'])
+                        password=hash_password)
             user.add(user)
             return {'Done': 'User added successfully'}, 201
         except SQLAlchemyError:
@@ -55,10 +58,10 @@ class UserLogin(Resource):
         """
         user_details = self.reqparse.parse_args()
         try:
-            user = User.query.filter_by(username=user_details['username'],
-                                        password=user_details['password']
+            user = User.query.filter_by(username=user_details['username']
                                         ).first()
-            if user:
+            if user and pbkdf2_sha256.verify(user_details['password'],
+                                             user.password):
                 # Generate authentication token
                 token = user.generate_auth_token(user.id)
                 # Covert Token from bytes to string
