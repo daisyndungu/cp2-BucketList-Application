@@ -2,12 +2,12 @@ machine:
     python:
         version: 3.6.1
 dependencies:
-    pre:
+    override:
         - pip install -r requirements.txt
         - pip install coveralls
 test:
     override:
-        - nosetests --with-coverage --cover-erase --cover-package=bucketlist
+        - nose2 --with-coverage
     post:
         - coveralls
 deployment:
