@@ -1,3 +1,6 @@
+[![Coverage Status](https://coveralls.io/repos/github/daisyndungu/cp2-BucketList-Application/badge.svg?branch=backend)](https://coveralls.io/github/daisyndungu/cp2-BucketList-Application?branch=backend)
+
+
 # cp2-BucketList-Application
 Online Bucket List service using Flask.(RESTful API)
 
