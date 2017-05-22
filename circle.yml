@@ -7,7 +7,7 @@ dependencies:
         - pip install coveralls
 test:
     override:
-        - nosetests --with-coverage
+        - nosetests --with-coverage --cover-erase --cover-package=bucketlist
     post:
         - coveralls
 deployment:
