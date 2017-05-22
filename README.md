@@ -1,5 +1,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/daisyndungu/cp2-BucketList-Application/badge.svg?branch=backend)](https://coveralls.io/github/daisyndungu/cp2-BucketList-Application?branch=backend)
 
+[![CircleCI](https://circleci.com/gh/daisyndungu/cp2-BucketList-Application.svg?style=svg)](https://circleci.com/gh/daisyndungu/cp2-BucketList-Application)
 
 # cp2-BucketList-Application
 Online Bucket List service using Flask.(RESTful API)
