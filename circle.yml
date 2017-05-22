@@ -1,6 +1,8 @@
 machine:
     python:
         version: 3.6.1
+    environment:
+        CODECLIMATE_REPO_TOKEN: 03de2c2359bd5783bc7caa31405cebe12d396dfcf5c6f96dc8beea9777834cd6
 dependencies:
     override:
         - pip install -r requirements.txt
