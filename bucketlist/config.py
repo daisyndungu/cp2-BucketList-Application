@@ -10,7 +10,7 @@ class Config():
     HOST = "http://127.0.0.1"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", None) + "/bucketlist"
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI") + "/bucketlist"
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'migrations')
     SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -33,10 +33,9 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = (os.getenv("DATABASE_URI", None
-                                         ) + "/testbucketlist")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI"
+                                        ) + "/testbucketlist"
     TESTING = True
-    DEBUG = True
 
 
 configurations = {
