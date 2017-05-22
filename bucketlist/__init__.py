@@ -15,7 +15,8 @@ def create_app(config_name):
         app = Flask(__name__)
         app.config.update(
             SECRET_KEY=os.getenv('SECRET_KEY'),
-            SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URI")
+            SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URI"),
+            SQLALCHEMY_TRACK_MODIFICATIONS=True
         )
     else:
         app = Flask(__name__)
