@@ -43,7 +43,7 @@ These are the basic steps to install and run the application locally.
 * install requirements into virtualenv:
 
       $ pip install -r cp2-BucketList-Application/requirements.txt
-      $ git checkout backend
+      $ git checkout develop
  * Start the application. This will initialize the database and create tables.
 
        $ python manage.py db init
